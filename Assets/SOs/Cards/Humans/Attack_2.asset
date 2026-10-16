@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64df4046e6d52fc4a892904e4dd28dae, type: 3}
   m_Name: Attack_2
   m_EditorClassIdentifier: Assembly-CSharp::Card
-  cardName: Shove
+  cardName: Heavy Strike
   cardCost: 2
   cardType: 0
-  damage: 8
+  applyType: 1
+  damage: 12
   attackType: 0
+  hitCount: 1
   shieldValue: 0

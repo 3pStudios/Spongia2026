@@ -6,10 +6,12 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     [SerializeField] private Canvas canvas;
     private RectTransform rectTransform;
     private Vector2 originalAnchoredPosition;
+    private Card card;
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         originalAnchoredPosition = rectTransform.anchoredPosition;
+        card = GetComponent<Card>();
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -22,11 +24,15 @@ public class DragDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
-        if (hit.collider != null && hit.collider.CompareTag("Player"))
+        if (hit.collider != null && hit.collider.CompareTag("Player") && card.cardData.applyType == ApplyType.Player)
         {
-            Debug.Log("Dropped on Player");
+
+            Debug.Log($"Dropped on {hit.collider.gameObject.name}");
+            PlayerDrop playerDrop = hit.collider.GetComponent<PlayerDrop>();
+            playerDrop.ApplyCard(card.cardData);
             Destroy(gameObject);
-        }
+            
+        }   
         else
         {
             rectTransform.anchoredPosition = originalAnchoredPosition;
