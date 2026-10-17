@@ -11,6 +11,7 @@ public class CardSO : ScriptableObject
     public int cardCost;
     public CardType cardType;
     public ApplyType applyType;
+    public Sprite cardImage;
 
     [Header("Attack Card Properties")]
     public int damage;
