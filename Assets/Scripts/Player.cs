@@ -1,15 +1,15 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class EnemyDrop : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    public int currentShield = 0;
     public void ApplyCard(CardSO cardData)
     {
-        Debug.Log($"Applying card: {cardData.cardName}");
-        if (cardData.cardType == CardType.Attack)
+        if (cardData.cardType == CardType.Shield)
         {
-
-            Debug.Log($"Applying attack: {cardData.damage}");
+            Debug.Log($"Applying shield: {cardData.shieldValue}");
+            currentShield += cardData.shieldValue;
         }
 
     }

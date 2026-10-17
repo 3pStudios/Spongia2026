@@ -16,6 +16,7 @@ MonoBehaviour:
   cardCost: 1
   cardType: 0
   applyType: 1
+  cardImage: {fileID: 2063848122905376595, guid: 4d46cfd9fd0313142a0357e84c114ae9, type: 3}
   damage: 5
   attackType: 0
   hitCount: 1

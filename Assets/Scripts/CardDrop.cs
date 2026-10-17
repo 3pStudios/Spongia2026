@@ -9,7 +9,7 @@ public class CardDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     private Card card;
     private void Awake()
     {
-        canvas = FindFirstObjectByType<Canvas>();
+        canvas = GetComponentInParent<Canvas>();
         rectTransform = GetComponent<RectTransform>();
         
         card = GetComponent<Card>();
@@ -19,6 +19,7 @@ public class CardDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
+        SetOriginalPosition();
     }
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -30,16 +31,19 @@ public class CardDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
             if(hit.collider.CompareTag("Player") && card.cardData.applyType == ApplyType.Player)
             {
                 Debug.Log($"Dropped on {hit.collider.gameObject.name}");
-                PlayerDrop playerDrop = hit.collider.GetComponent<PlayerDrop>();
-                playerDrop.ApplyCard(card.cardData);
+                
+                GameManager.Instance.PlayCardPlayer(card.cardData);
+
                 Destroy(gameObject);
+
             }
             else if(hit.collider.CompareTag("Enemy") && card.cardData.applyType == ApplyType.Enemy)
             {
                 Debug.Log($"Dropped on {hit.collider.gameObject.name}");
-                EnemyDrop enemyDrop = hit.collider.GetComponent<EnemyDrop>();
-                enemyDrop.ApplyCard(card.cardData);
+                GameManager.Instance.PlayCardEnemy(card.cardData, hit.collider.gameObject.GetComponent<Enemy>());
                 Destroy(gameObject);
+
+
             }
             rectTransform.anchoredPosition = originalAnchoredPosition;
 
