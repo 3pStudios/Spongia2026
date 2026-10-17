@@ -115,23 +115,25 @@ public class GameManager : MonoBehaviour
     {
         
         playedDeckPlayer.Add(new PlayedCardPlayer { cardData = card });
+        player.ApplyCard(card);
         DiscardCard(card);
     }
     public void PlayCardEnemy(CardSO card, Enemy enemy)
     {
+        enemy.ApplyCard(card);
         playedDeckEnemy.Add(new PlayedCardEnemy { cardData = card, appliedEnemy = enemy });
         DiscardCard(card);
     }
     public void EndTurn()
     {
-        foreach (var playedCard in playedDeckPlayer)
-        {
-            player.ApplyCard(playedCard.cardData);
-        }
-        foreach (var playedCard in playedDeckEnemy)
-        {
-            playedCard.appliedEnemy.ApplyCard(playedCard.cardData);
-        }
+        //foreach (var playedCard in playedDeckPlayer)
+        //{
+        //    player.ApplyCard(playedCard.cardData);
+        //}
+        //foreach (var playedCard in playedDeckEnemy)
+        //{
+        //    playedCard.appliedEnemy.ApplyCard(playedCard.cardData);
+        //}
         playedDeckPlayer.Clear();
         playedDeckEnemy.Clear();
         DrawCardsNewRound(5); // Draw 5 new cards at the start of the next turn
