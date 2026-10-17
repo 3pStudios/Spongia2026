@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public int currentHealth = 20;
     public void ApplyCard(CardSO cardData)
     {
+      
         if (cardData.cardType == CardType.Attack)
         { 
             Debug.Log($"Taking damage: {cardData.damage}");
