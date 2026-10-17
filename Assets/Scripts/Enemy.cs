@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     {
         if (cardData.cardType == CardType.Attack)
         {
-            Debug.Log($"Applying attack: {cardData.damage}");
+            Debug.Log($"Taking damage: {cardData.damage}");
             TakeDamage(cardData.damage);
             UpdateHealthUI();
         }
