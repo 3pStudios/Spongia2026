@@ -11,7 +11,6 @@ public class CardDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, I
     {
         canvas = GetComponentInParent<Canvas>();
         rectTransform = GetComponent<RectTransform>();
-        
         card = GetComponent<Card>();
     }
     public void OnPointerDown(PointerEventData eventData)

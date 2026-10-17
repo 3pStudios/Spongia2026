@@ -6,6 +6,7 @@ using UnityEditor.AdaptivePerformance.Editor;
 
 public class GameManager : MonoBehaviour
 {
+    public int gameTurn = 0;
     public List<CardSO> masterDeck = new();
     public List<CardSO> drawDeck = new();
     public List<CardSO> discardDeck = new();
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
     public List<PlayedCardPlayer> playedDeckPlayer = new();
     public List<PlayedCardEnemy> playedDeckEnemy = new();
 
+    public List<Enemy> enemiesAlive = new();
 
     public Player player;
 
@@ -134,9 +136,14 @@ public class GameManager : MonoBehaviour
         //{
         //    playedCard.appliedEnemy.ApplyCard(playedCard.cardData);
         //}
-        playedDeckPlayer.Clear();
-        playedDeckEnemy.Clear();
+        //playedDeckPlayer.Clear();
+        //playedDeckEnemy.Clear();
+        foreach (var enemy in enemiesAlive)
+        {
+            enemy.TickTurn(gameTurn);
+        }
         DrawCardsNewRound(5); // Draw 5 new cards at the start of the next turn
+        gameTurn++;
     }
 }
 [System.Serializable]
