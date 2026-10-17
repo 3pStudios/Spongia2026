@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -8,17 +9,35 @@ public class Player : MonoBehaviour
     public int maxHealth = 20;
     public int currentHealth = 20;
 
+
+
+
     [Header("Shield")]
     public int currentShield = 0;
+
+
+
 
     [Header("Mana")]
     public int maxMana = 3;
     public int currentMana = 3;
 
+
+
+
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Image healthBarFill;
     [SerializeField] private TextMeshProUGUI manaText;
+
+
+
+
+    [Header("Attack FX")]
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private Transform shootPoint;
+
+
 
     private void Start()
     {
@@ -77,13 +96,35 @@ public class Player : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (healthText != null)
-            healthText.text = $"{currentHealth}/{maxHealth}";
+        healthText.text = $"{currentHealth}/{maxHealth}";
+        healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+        manaText.text = $"{currentMana}/{maxMana}";
+    }
+    public IEnumerator AttackEnemyRoutine(Enemy target, CardSO card)
+    {
+        Vector3 originalPos = transform.position;
+        Vector3 lungePos = originalPos + new Vector3(0.4f, 0, 0);
 
-        if (healthBarFill != null && maxHealth > 0)
-            healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+        for (int i = 0; i < card.hitCount; i++)
+        {
+            if (target == null || target.currentHealth <= 0) break;
+            transform.position = lungePos;
+            yield return new WaitForSeconds(0.08f);
 
-        if (manaText != null)
-            manaText.text = $"{currentMana}/{maxMana}";
+            GameObject arrowObj = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
+            Projectile projectile = arrowObj.GetComponent<Projectile>();
+
+            yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 12f));
+
+            target.TakeDamage(card.damage);
+
+            transform.position = originalPos;
+            if (card.hitCount > 1)
+            {
+                yield return new WaitForSeconds(0.12f);
+            }
+        }
+
+        transform.position = originalPos;
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +7,13 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    public bool isProcessingTurn { get; private set; }
+
     [Header("Turn")]
     public int gameTurn = 0;
+
+
+
 
     [Header("Decks")]
     public List<CardSO> masterDeck = new();
@@ -15,22 +21,31 @@ public class GameManager : MonoBehaviour
     public List<CardSO> handDeck = new();
     public List<CardSO> discardDeck = new();
 
+
+
+
     [Header("Entities")]
     public Player player;
     public List<Enemy> enemiesAlive = new();
+
+
+
 
     [Header("UI & Spawning")]
     [SerializeField] private GameObject cardPlace;
     [SerializeField] private GameObject cardPrefab;
 
+
+
+
     private void Awake()
     {
+        //Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
     }
 
@@ -40,20 +55,26 @@ public class GameManager : MonoBehaviour
         drawDeck = new List<CardSO>(masterDeck);
         drawDeck.Shuffle();
 
-        if (player == null)
-            player = FindFirstObjectByType<Player>();
-
-        StartNewRound();
-
         foreach (var enemy in enemiesAlive)
         {
             enemy.SetupEnemy();
         }
+
+        StartCoroutine(StartGameRoutine());
+    }
+    //Reset game state
+    private IEnumerator StartGameRoutine()
+    {
+        isProcessingTurn = true;
+        player.ResetMana();
+        player.ResetShield();
+        yield return StartCoroutine(DrawCardsRoutine(5));
+        isProcessingTurn = false;
     }
 
     public bool CanPlayCard(CardSO card)
     {
-        return player != null && player.HasEnoughMana(card.cardCost);
+        return !isProcessingTurn && player != null && player.HasEnoughMana(card.cardCost);
     }
 
     public void PlayCardPlayer(CardSO card)
@@ -70,32 +91,52 @@ public class GameManager : MonoBehaviour
         if (!CanPlayCard(card)) return;
 
         player.SpendMana(card.cardCost);
-        enemy.ApplyCard(card);
         DiscardCard(card);
+        StartCoroutine(PlayerAttackSequence(card, enemy));
+    }
+
+    private IEnumerator PlayerAttackSequence(CardSO card, Enemy enemy)
+    {
+        isProcessingTurn = true;
+        yield return StartCoroutine(player.AttackEnemyRoutine(enemy, card));
+        isProcessingTurn = false;
+    }
+    public IEnumerator EnemyAttackSequence(Enemy enemy, int attackDamage)
+    {
+        isProcessingTurn = true;
+        yield return StartCoroutine(enemy.AttackPlayerRoutine(player, attackDamage));
+        isProcessingTurn = false;
     }
 
     public void EndTurn()
     {
+        if (isProcessingTurn) return;
+        StartCoroutine(EndTurnRoutine());
+    }
+
+    private IEnumerator EndTurnRoutine()
+    {
+        isProcessingTurn = true;
+
         foreach (var enemy in new List<Enemy>(enemiesAlive))
         {
             if (enemy != null)
             {
-                enemy.TickTurn(gameTurn);
+                yield return StartCoroutine(enemy.TickTurnRoutine(gameTurn));
             }
         }
 
         gameTurn++;
-        StartNewRound();
-    }
 
-    private void StartNewRound()
-    {
         player.ResetMana();
         player.ResetShield();
-        DrawCardsNewRound(5);
+
+        yield return StartCoroutine(DrawCardsRoutine(5));
+
+        isProcessingTurn = false;
     }
 
-    public void DrawCardsNewRound(int numberOfCards)
+    public IEnumerator DrawCardsRoutine(int numberOfCards)
     {
         discardDeck.AddRange(handDeck);
         handDeck.Clear();
@@ -105,20 +146,22 @@ public class GameManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        yield return null;
+
         for (int i = 0; i < numberOfCards; i++)
         {
             CardSO drawnCard = DrawCard();
             if (drawnCard == null) continue;
 
             var newCard = Instantiate(cardPrefab, cardPlace.transform);
+
             Card cardComponent = newCard.GetComponent<Card>();
             cardComponent.cardData = drawnCard;
 
             Image cardImg = newCard.GetComponent<Image>();
-            if (cardImg != null && drawnCard.cardImage != null)
-            {
-                cardImg.sprite = drawnCard.cardImage;
-            }
+            cardImg.sprite = drawnCard.cardImage;
+
+            yield return new WaitForSeconds(0.15f);
         }
     }
 

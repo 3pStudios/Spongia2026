@@ -28,10 +28,14 @@ public class CardSO : ScriptableObject
     public ApplyType applyType;
     public Sprite cardImage;
 
+
+
     [Header("Attack Properties")]
     public int damage;
     public AttackType attackType;
     public int hitCount = 1;
+
+
 
     [Header("Shield Properties")]
     public int shieldValue;

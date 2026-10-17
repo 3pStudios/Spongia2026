@@ -6,7 +6,8 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 {
     private Canvas canvas;
     private RectTransform rectTransform;
-    private Vector2 originalAnchoredPosition;
+    private Transform originalParent;
+    private int originalSiblingIndex;
     private Card card;
 
     private void Awake()
@@ -18,11 +19,19 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        originalAnchoredPosition = rectTransform.anchoredPosition;
+        if (GameManager.Instance.isProcessingTurn) return;
+
+        originalParent = transform.parent;
+        originalSiblingIndex = transform.GetSiblingIndex();
+
+        transform.SetParent(canvas.transform, true);
+        transform.SetAsLastSibling();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (GameManager.Instance.isProcessingTurn) return;
+
         if (canvas != null)
         {
             rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
@@ -33,10 +42,10 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (!GameManager.Instance.CanPlayCard(card.cardData))
         {
-            Debug.Log("Not enough Mana!");
             ResetPosition();
             return;
         }
+
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
@@ -48,6 +57,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 Destroy(gameObject);
                 return;
             }
+
             if (hit.collider.CompareTag("Enemy") && card.cardData.applyType == ApplyType.Enemy)
             {
                 Enemy enemy = hit.collider.GetComponent<Enemy>();
@@ -59,11 +69,13 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 }
             }
         }
+
         ResetPosition();
     }
 
     private void ResetPosition()
     {
-        rectTransform.anchoredPosition = originalAnchoredPosition;
+        transform.SetParent(originalParent, true);
+        transform.SetSiblingIndex(originalSiblingIndex);
     }
 }
