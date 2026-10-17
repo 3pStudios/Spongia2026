@@ -165,7 +165,8 @@ MonoBehaviour:
   handDeck: []
   playedDeckPlayer: []
   playedDeckEnemy: []
-  enemiesAlive: []
+  enemiesAlive:
+  - {fileID: 1628346187}
   player: {fileID: 213370743}
   canvas: {fileID: 119559161}
   cardPlace: {fileID: 1378682903}
@@ -431,6 +432,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDrop
   currentShield: 0
+  currentHealth: 20
+  maxHealth: 20
+  healthText: {fileID: 2012379207}
+  healthBarFill: {fileID: 2039459618}
 --- !u!61 &213370744
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1765,7 +1770,7 @@ GameObject:
   - component: {fileID: 1330097932}
   - component: {fileID: 1330097931}
   m_Layer: 0
-  m_Name: ShieldIndition (1)
+  m_Name: AttackIndition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2218,8 +2223,11 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 20
   currentShield: 0
+  currentAttack: 0
   enemyTurnsSO: {fileID: 11400000, guid: 4a2790489b8defa4885d068c9f9e41c8, type: 2}
   healthText: {fileID: 1262498088}
+  shieldInditionText: {fileID: 807889681}
+  attackInditionText: {fileID: 1330097931}
   healthBarFill: {fileID: 1655175102}
 --- !u!1 &1655175101
 GameObject:

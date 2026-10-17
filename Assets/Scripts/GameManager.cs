@@ -41,16 +41,17 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gameTurn = 0;
         drawDeck = new List<CardSO>(masterDeck);
         ShuffleDraw();
         DrawCardsNewRound(5); // Draw 5 cards at the start of the game
+        foreach (var enemy in enemiesAlive)
+        {
+            enemy.SetupEnemy();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     public void DrawCardsNewRound(int numberOfCards)
     {
         discardDeck.AddRange(handDeck);
@@ -138,12 +139,14 @@ public class GameManager : MonoBehaviour
         //}
         //playedDeckPlayer.Clear();
         //playedDeckEnemy.Clear();
+        
+        DrawCardsNewRound(5); // Draw 5 new cards at the start of the next turn
+        gameTurn++;
         foreach (var enemy in enemiesAlive)
         {
             enemy.TickTurn(gameTurn);
         }
-        DrawCardsNewRound(5); // Draw 5 new cards at the start of the next turn
-        gameTurn++;
+        player.currentShield = 0;
     }
 }
 [System.Serializable]

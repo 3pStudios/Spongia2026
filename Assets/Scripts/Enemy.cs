@@ -9,7 +9,20 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 20;
     public int currentHealth = 20;
     public int currentShield = 0;
+    public int currentAttack = 0;
+    public EnemyTurnsSO enemyTurnsSO;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI shieldInditionText;
+    [SerializeField] private TextMeshProUGUI attackInditionText;
 
+
+
+    [SerializeField] private Image healthBarFill;
+
+    public void SetupEnemy()
+    {
+        SetupTurn(0);
+    }
     public void ApplyCard(CardSO cardData)
     {
       
@@ -19,7 +32,6 @@ public class Enemy : MonoBehaviour
             {
                 Debug.Log($"Taking damage: {cardData.damage}");
                 TakeDamage(cardData.damage);
-                UpdateHealthUI();
             }
         }
 
@@ -30,48 +42,73 @@ public class Enemy : MonoBehaviour
         currentShield += shieldValue;
         Debug.Log($"Applying shield: {shieldValue}. Current shield: {currentShield}");
     }
+
+
     public void AttackPlayer()
     {
         
     }
-    public EnemyTurnsSO enemyTurnsSO;
-    [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private Image healthBarFill;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UpdateHealthUI();
+        UpdateUI();
     }
 
-    // Update is called once per frame
     public void TakeDamage(int damage)
     {
-        currentHealth = Mathf.Clamp(currentHealth -= damage, 0, maxHealth);
-        UpdateHealthUI();
+        int unblockedDamage = Mathf.Max(0, damage - currentShield);
+        currentShield = Mathf.Max(0, currentShield - damage);
+        currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
+
+        UpdateUI();
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
-    private void UpdateHealthUI()
+
+    private void Die()
+    {
+        Debug.Log($"{gameObject.name} died");
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.enemiesAlive.Remove(this);
+        }
+        Destroy(gameObject);
+    }
+    private void UpdateUI()
     {
         healthText.text = $"{currentHealth}/{maxHealth}";
         healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+        attackInditionText.text = currentAttack.ToString();
+        shieldInditionText.text = currentShield.ToString();
     }
     public void TickTurn(int turn)
     {
+        if (currentAttack != 0)
+        {
+            Debug.Log($"Attacking Player for {currentAttack}");
+            Player player = FindFirstObjectByType<Player>();
+            player.TakeDamage(currentAttack);
+        }
         int turnIndex = turn % enemyTurnsSO.enemyTurns.Count();
-        PlayMove(turnIndex);
+        SetupTurn(turnIndex);
+        
     }
-    private void PlayMove(int move)
+    private void SetupTurn(int move)
     {
         EnemyTurn currentTurn = enemyTurnsSO.enemyTurns[move];
+        Debug.Log("Current turn enemy is gonna play is " + move);
         if(currentTurn.turnType == CardType.Attack)
         {
-            Debug.Log($"Enemy attacks with {currentTurn.value} damage.");
-            // Implement attack logic here
+            currentAttack = currentTurn.value;
+            currentShield = 0;
         }
         else if (currentTurn.turnType == CardType.Shield)
         {
-            ApplyShield(currentTurn.value);
-            Debug.Log($"Enemy applies {currentTurn.value} shield.");
+            currentShield = currentTurn.value;
+            currentAttack = 0;
         }
+        UpdateUI();
 
     }
 }
