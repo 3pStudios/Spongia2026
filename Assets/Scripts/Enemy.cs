@@ -72,5 +72,6 @@ public class Enemy : MonoBehaviour
             ApplyShield(currentTurn.value);
             Debug.Log($"Enemy applies {currentTurn.value} shield.");
         }
+
     }
 }
