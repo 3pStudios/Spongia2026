@@ -1,63 +1,69 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardDrop : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+[RequireComponent(typeof(Card), typeof(RectTransform))]
+public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private Canvas canvas;
     private RectTransform rectTransform;
     private Vector2 originalAnchoredPosition;
     private Card card;
+
     private void Awake()
     {
         canvas = GetComponentInParent<Canvas>();
         rectTransform = GetComponent<RectTransform>();
         card = GetComponent<Card>();
     }
-    public void OnPointerDown(PointerEventData eventData)
-    {
-    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        SetOriginalPosition();
+        originalAnchoredPosition = rectTransform.anchoredPosition;
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (canvas != null)
+        {
+            rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        }
+    }
+
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!GameManager.Instance.CanPlayCard(card.cardData))
+        {
+            Debug.Log("Not enough Mana!");
+            ResetPosition();
+            return;
+        }
         Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
         if (hit.collider != null)
         {
-            if(hit.collider.CompareTag("Player") && card.cardData.applyType == ApplyType.Player)
+            if (hit.collider.CompareTag("Player") && card.cardData.applyType == ApplyType.Player)
             {
-                Debug.Log($"Dropped on {hit.collider.gameObject.name}");
-                
                 GameManager.Instance.PlayCardPlayer(card.cardData);
-
                 Destroy(gameObject);
-
+                return;
             }
-            else if(hit.collider.CompareTag("Enemy") && card.cardData.applyType == ApplyType.Enemy)
+            if (hit.collider.CompareTag("Enemy") && card.cardData.applyType == ApplyType.Enemy)
             {
-                Debug.Log($"Dropped on {hit.collider.gameObject.name}");
-                GameManager.Instance.PlayCardEnemy(card.cardData, hit.collider.gameObject.GetComponent<Enemy>());
-                Destroy(gameObject);
-
-
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                if (enemy != null)
+                {
+                    GameManager.Instance.PlayCardEnemy(card.cardData, enemy);
+                    Destroy(gameObject);
+                    return;
+                }
             }
-            rectTransform.anchoredPosition = originalAnchoredPosition;
-
-        }   
-        else
-        {
-            rectTransform.anchoredPosition = originalAnchoredPosition;
         }
+        ResetPosition();
     }
-    public void OnDrag(PointerEventData eventData)
+
+    private void ResetPosition()
     {
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-    }
-    public void SetOriginalPosition()
-    {
-        originalAnchoredPosition = rectTransform.anchoredPosition;
+        rectTransform.anchoredPosition = originalAnchoredPosition;
     }
 }

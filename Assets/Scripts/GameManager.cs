@@ -1,179 +1,162 @@
-using UnityEngine;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.AdaptivePerformance.Editor;
 
 public class GameManager : MonoBehaviour
 {
-    public int gameTurn = 0;
-    public List<CardSO> masterDeck = new();
-    public List<CardSO> drawDeck = new();
-    public List<CardSO> discardDeck = new();
-    public List<CardSO> handDeck = new();
-    public List<PlayedCardPlayer> playedDeckPlayer = new();
-    public List<PlayedCardEnemy> playedDeckEnemy = new();
-
-    public List<Enemy> enemiesAlive = new();
-
-    public Player player;
-
-    [SerializeField] private Canvas canvas;
-    [SerializeField] private GameObject cardPlace;
-    [SerializeField] private GameObject cardPrefab;
-    public Vector2 originCardPosition = new(-520, 60);
-
     public static GameManager Instance { get; private set; }
 
+    [Header("Turn")]
+    public int gameTurn = 0;
+
+    [Header("Decks")]
+    public List<CardSO> masterDeck = new();
+    public List<CardSO> drawDeck = new();
+    public List<CardSO> handDeck = new();
+    public List<CardSO> discardDeck = new();
+
+    [Header("Entities")]
+    public Player player;
+    public List<Enemy> enemiesAlive = new();
+
+    [Header("UI & Spawning")]
+    [SerializeField] private GameObject cardPlace;
+    [SerializeField] private GameObject cardPrefab;
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
+            return;
         }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
+
+        Instance = this;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Start()
     {
         gameTurn = 0;
         drawDeck = new List<CardSO>(masterDeck);
-        ShuffleDraw();
-        DrawCardsNewRound(5); // Draw 5 cards at the start of the game
+        drawDeck.Shuffle();
+
+        if (player == null)
+            player = FindFirstObjectByType<Player>();
+
+        StartNewRound();
+
         foreach (var enemy in enemiesAlive)
         {
             enemy.SetupEnemy();
         }
     }
 
-    
+    public bool CanPlayCard(CardSO card)
+    {
+        return player != null && player.HasEnoughMana(card.cardCost);
+    }
+
+    public void PlayCardPlayer(CardSO card)
+    {
+        if (!CanPlayCard(card)) return;
+
+        player.SpendMana(card.cardCost);
+        player.ApplyCard(card);
+        DiscardCard(card);
+    }
+
+    public void PlayCardEnemy(CardSO card, Enemy enemy)
+    {
+        if (!CanPlayCard(card)) return;
+
+        player.SpendMana(card.cardCost);
+        enemy.ApplyCard(card);
+        DiscardCard(card);
+    }
+
+    public void EndTurn()
+    {
+        foreach (var enemy in new List<Enemy>(enemiesAlive))
+        {
+            if (enemy != null)
+            {
+                enemy.TickTurn(gameTurn);
+            }
+        }
+
+        gameTurn++;
+        StartNewRound();
+    }
+
+    private void StartNewRound()
+    {
+        player.ResetMana();
+        player.ResetShield();
+        DrawCardsNewRound(5);
+    }
+
     public void DrawCardsNewRound(int numberOfCards)
     {
         discardDeck.AddRange(handDeck);
         handDeck.Clear();
+
         foreach (Transform child in cardPlace.transform)
         {
             Destroy(child.gameObject);
         }
+
         for (int i = 0; i < numberOfCards; i++)
         {
-            DrawCard();
+            CardSO drawnCard = DrawCard();
+            if (drawnCard == null) continue;
+
             var newCard = Instantiate(cardPrefab, cardPlace.transform);
-            Card card = newCard.GetComponent<Card>();
-            card.cardData = handDeck[i]; // Get the last drawn card
-            newCard.GetComponent<Image>().sprite = card.cardData.cardImage;
+            Card cardComponent = newCard.GetComponent<Card>();
+            cardComponent.cardData = drawnCard;
+
+            Image cardImg = newCard.GetComponent<Image>();
+            if (cardImg != null && drawnCard.cardImage != null)
+            {
+                cardImg.sprite = drawnCard.cardImage;
+            }
         }
     }
 
-    public void DrawCard()
+    public CardSO DrawCard()
     {
         if (drawDeck.Count == 0)
         {
-            Debug.Log("Draw deck is empty, reshuffling discard deck into draw deck.");
-            PutDiscardIntoDraw();
-            ShuffleDraw();
+            if (discardDeck.Count == 0) return null;
+
+            drawDeck.AddRange(discardDeck);
+            discardDeck.Clear();
+            drawDeck.Shuffle();
         }
-        if (drawDeck.Count > 0)
-        {
-            CardSO drawnCard = drawDeck[0];
-            drawDeck.RemoveAt(0);
-            handDeck.Add(drawnCard);
-            Debug.Log($"Drew card: {drawnCard.cardName}");
-        }
-        else
-        {
-            Debug.Log("No cards left to draw.");
-        }
+
+        CardSO drawnCard = drawDeck[0];
+        drawDeck.RemoveAt(0);
+        handDeck.Add(drawnCard);
+        return drawnCard;
     }
-    public void PutDiscardIntoDraw()
-    {
-        drawDeck.AddRange(discardDeck);
-        discardDeck.Clear();
-        Debug.Log("Put discard deck into draw deck.");
-    }
-    public void ShuffleDraw()
-    {
-        drawDeck.Shuffle();
-        Debug.Log("Shuffled draw deck.");
-    }
+
     public void DiscardCard(CardSO card)
     {
         if (handDeck.Contains(card))
         {
             handDeck.Remove(card);
             discardDeck.Add(card);
-            Debug.Log($"Discarded card: {card.cardName}");
-        }
-        else
-        {
-            Debug.LogWarning($"Attempted to discard a card not in hand: {card.cardName}");
         }
     }
-    public void PlayCardPlayer(CardSO card)
-    {
-        
-        playedDeckPlayer.Add(new PlayedCardPlayer { cardData = card });
-        player.ApplyCard(card);
-        DiscardCard(card);
-    }
-    public void PlayCardEnemy(CardSO card, Enemy enemy)
-    {
-        enemy.ApplyCard(card);
-        playedDeckEnemy.Add(new PlayedCardEnemy { cardData = card, appliedEnemy = enemy });
-        DiscardCard(card);
-    }
-    public void EndTurn()
-    {
-        //foreach (var playedCard in playedDeckPlayer)
-        //{
-        //    player.ApplyCard(playedCard.cardData);
-        //}
-        //foreach (var playedCard in playedDeckEnemy)
-        //{
-        //    playedCard.appliedEnemy.ApplyCard(playedCard.cardData);
-        //}
-        //playedDeckPlayer.Clear();
-        //playedDeckEnemy.Clear();
-        
-        DrawCardsNewRound(5); // Draw 5 new cards at the start of the next turn
-        gameTurn++;
-        foreach (var enemy in enemiesAlive)
-        {
-            enemy.TickTurn(gameTurn);
-        }
-        player.currentShield = 0;
-    }
 }
-[System.Serializable]
-public class PlayedCardPlayer
-{
-    public CardSO cardData;
-}
-[System.Serializable]
-public class PlayedCardEnemy
-{
-   public CardSO cardData;
-    public Enemy appliedEnemy;
-}
-//Dakujem Unity Forums 
+
 public static class IListExtensions
 {
-    /// Shuffles the element order of the specified list.
-    public static void Shuffle<T>(this IList<T> ts)
+    public static void Shuffle<T>(this IList<T> list)
     {
-        var count = ts.Count;
-        var last = count - 1;
-        for (var i = 0; i < last; ++i)
+        for (int i = 0; i < list.Count - 1; i++)
         {
-            var r = UnityEngine.Random.Range(i, count);
-            var tmp = ts[i];
-            ts[i] = ts[r];
-            ts[r] = tmp;
+            int r = Random.Range(i, list.Count);
+            (list[i], list[r]) = (list[r], list[i]);
         }
     }
 }

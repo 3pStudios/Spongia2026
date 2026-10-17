@@ -1,56 +1,44 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
-using System.Linq;
+
 public class Enemy : MonoBehaviour
 {
+    [Header("Stats")]
     public int maxHealth = 20;
     public int currentHealth = 20;
     public int currentShield = 0;
     public int currentAttack = 0;
+
+    [Header("Turns Data")]
     public EnemyTurnsSO enemyTurnsSO;
+
+    [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private TextMeshProUGUI shieldInditionText;
-    [SerializeField] private TextMeshProUGUI attackInditionText;
-
-
-
+    [SerializeField] private TextMeshProUGUI shieldIndicationText;
+    [SerializeField] private TextMeshProUGUI attackIndicationText;
     [SerializeField] private Image healthBarFill;
+
+    private void Start()
+    {
+        UpdateUI();
+    }
 
     public void SetupEnemy()
     {
         SetupTurn(0);
     }
+
     public void ApplyCard(CardSO cardData)
     {
-      
         if (cardData.cardType == CardType.Attack)
         {
             for (int i = 0; i < cardData.hitCount; i++)
             {
-                Debug.Log($"Taking damage: {cardData.damage}");
+                if (currentHealth <= 0) break;
                 TakeDamage(cardData.damage);
             }
         }
-
-    }
-
-    public void ApplyShield(int shieldValue)
-    {
-        currentShield += shieldValue;
-        Debug.Log($"Applying shield: {shieldValue}. Current shield: {currentShield}");
-    }
-
-
-    public void AttackPlayer()
-    {
-        
-    }
-    void Start()
-    {
-        UpdateUI();
     }
 
     public void TakeDamage(int damage)
@@ -60,6 +48,7 @@ public class Enemy : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
 
         UpdateUI();
+
         if (currentHealth <= 0)
         {
             Die();
@@ -68,47 +57,60 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log($"{gameObject.name} died");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.enemiesAlive.Remove(this);
         }
         Destroy(gameObject);
     }
-    private void UpdateUI()
-    {
-        healthText.text = $"{currentHealth}/{maxHealth}";
-        healthBarFill.fillAmount = (float)currentHealth / maxHealth;
-        attackInditionText.text = currentAttack.ToString();
-        shieldInditionText.text = currentShield.ToString();
-    }
+
     public void TickTurn(int turn)
     {
-        if (currentAttack != 0)
+        if (currentAttack > 0)
         {
-            Debug.Log($"Attacking Player for {currentAttack}");
             Player player = FindFirstObjectByType<Player>();
-            player.TakeDamage(currentAttack);
+            if (player != null)
+            {
+                player.TakeDamage(currentAttack);
+            }
         }
-        int turnIndex = turn % enemyTurnsSO.enemyTurns.Count();
-        SetupTurn(turnIndex);
-        
+
+        int nextTurnIndex = (turn + 1) % enemyTurnsSO.enemyTurns.Length;
+        SetupTurn(nextTurnIndex);
     }
-    private void SetupTurn(int move)
+
+    private void SetupTurn(int turnIndex)
     {
-        EnemyTurn currentTurn = enemyTurnsSO.enemyTurns[move];
-        Debug.Log("Current turn enemy is gonna play is " + move);
-        if(currentTurn.turnType == CardType.Attack)
+        if (enemyTurnsSO == null || enemyTurnsSO.enemyTurns.Length == 0) return;
+
+        EnemyTurn turn = enemyTurnsSO.enemyTurns[turnIndex];
+
+        if (turn.turnType == CardType.Attack)
         {
-            currentAttack = currentTurn.value;
+            currentAttack = turn.value;
             currentShield = 0;
         }
-        else if (currentTurn.turnType == CardType.Shield)
+        else if (turn.turnType == CardType.Shield)
         {
-            currentShield = currentTurn.value;
+            currentShield = turn.value;
             currentAttack = 0;
         }
-        UpdateUI();
 
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        if (healthText != null)
+            healthText.text = $"{currentHealth}/{maxHealth}";
+
+        if (healthBarFill != null && maxHealth > 0)
+            healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+
+        if (attackIndicationText != null)
+            attackIndicationText.text = currentAttack.ToString();
+
+        if (shieldIndicationText != null)
+            shieldIndicationText.text = currentShield.ToString();
     }
 }
