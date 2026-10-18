@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            Debug.Log("Player died!");
+            GameManager.Instance.PlayerDied();
         }
     }
 
@@ -114,7 +114,7 @@ public class Player : MonoBehaviour
             GameObject arrowObj = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
             Projectile projectile = arrowObj.GetComponent<Projectile>();
 
-            yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 12f));
+            yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 30f));
 
             target.TakeDamage(card.damage);
 

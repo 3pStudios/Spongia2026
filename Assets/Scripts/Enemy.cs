@@ -62,6 +62,7 @@ public class Enemy : MonoBehaviour
     {
         GameManager.Instance.enemiesAlive.Remove(this);
         Destroy(gameObject);
+        GameManager.Instance.CheckBattleOver();
     }
 
     public IEnumerator TickTurnRoutine(int turn)
@@ -111,7 +112,7 @@ public class Enemy : MonoBehaviour
         GameObject arrowObj = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Projectile projectile = arrowObj.GetComponent<Projectile>();
 
-        yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 12f));
+        yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 30f));
 
         target.TakeDamage(attackDamage);
 

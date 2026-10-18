@@ -23,7 +23,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         originalParent = transform.parent;
         originalSiblingIndex = transform.GetSiblingIndex();
-
+        card.SetDragging(true);
         transform.SetParent(canvas.transform, true);
         transform.SetAsLastSibling();
     }
@@ -40,6 +40,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        card.SetDragging(false);
         if (!GameManager.Instance.CanPlayCard(card.cardData))
         {
             ResetPosition();

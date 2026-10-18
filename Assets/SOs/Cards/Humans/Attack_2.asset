@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Card
   cardName: Heavy Strike
   cardCost: 2
+  cardDescription: Deal 12 damage to one target
   cardType: 0
   applyType: 1
-  cardImage: {fileID: -4324000893141435358, guid: 15ea837ba748f074184cb4a73b03347c, type: 3}
+  cardImage: {fileID: 2441674748022358507, guid: 48cfa992b6eda884d83fedd3a56fdf44,
+    type: 3}
   damage: 12
   attackType: 0
   hitCount: 1

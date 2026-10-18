@@ -14,9 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Card
   cardName: Double Strike
   cardCost: 2
+  cardDescription: Deal 3 damage to one target twice
   cardType: 0
   applyType: 1
-  cardImage: {fileID: -7268739402346621562, guid: 12ea3e7f53f917042ac99301ebcece21, type: 3}
+  cardImage: {fileID: 3531089406834146607, guid: c9ea5f3e9b4f1d140a2bf16493307586,
+    type: 3}
   damage: 3
   attackType: 0
   hitCount: 2

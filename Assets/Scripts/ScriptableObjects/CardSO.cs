@@ -24,9 +24,11 @@ public class CardSO : ScriptableObject
     [Header("General Info")]
     public string cardName;
     public int cardCost = 1;
+    [TextArea(2, 4)] public string cardDescription;
     public CardType cardType;
     public ApplyType applyType;
     public Sprite cardImage;
+
 
 
 

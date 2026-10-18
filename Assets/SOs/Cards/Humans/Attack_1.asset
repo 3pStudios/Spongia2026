@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Card
   cardName: Basic Strike
   cardCost: 1
+  cardDescription: Deal 5 damage to one target
   cardType: 0
   applyType: 1
-  cardImage: {fileID: 8303623387038764437, guid: 4cf5080200bb608469c2737a7502e8a1,
+  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
     type: 3}
   damage: 5
   attackType: 0

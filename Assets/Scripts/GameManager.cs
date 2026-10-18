@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -103,9 +104,7 @@ public class GameManager : MonoBehaviour
     }
     public IEnumerator EnemyAttackSequence(Enemy enemy, int attackDamage)
     {
-        isProcessingTurn = true;
         yield return StartCoroutine(enemy.AttackPlayerRoutine(player, attackDamage));
-        isProcessingTurn = false;
     }
 
     public void EndTurn()
@@ -156,10 +155,11 @@ public class GameManager : MonoBehaviour
             var newCard = Instantiate(cardPrefab, cardPlace.transform);
 
             Card cardComponent = newCard.GetComponent<Card>();
-            cardComponent.cardData = drawnCard;
+            cardComponent.SetupCard(drawnCard);
 
             Image cardImg = newCard.GetComponent<Image>();
             cardImg.sprite = drawnCard.cardImage;
+
 
             yield return new WaitForSeconds(0.15f);
         }
@@ -190,6 +190,39 @@ public class GameManager : MonoBehaviour
             discardDeck.Add(card);
         }
     }
+
+
+
+    public void CheckBattleOver()
+    {
+        if (enemiesAlive.Count == 0)
+        {
+            StartCoroutine(VictoryRoutine());
+        }
+    }
+
+    public void PlayerDied()
+    {
+        StopAllCoroutines();
+        StartCoroutine(GameOverRoutine());
+    }
+    private IEnumerator VictoryRoutine()
+    {
+        isProcessingTurn = true;
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Start Menu");
+    }
+
+    private IEnumerator GameOverRoutine()
+    {
+        isProcessingTurn = true;
+        yield return new WaitForSeconds(1f);
+        SceneManager.LoadScene("Start Menu");
+    }
+
+
+
+
 }
 
 public static class IListExtensions
