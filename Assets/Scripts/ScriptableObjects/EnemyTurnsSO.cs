@@ -11,5 +11,4 @@ public class EnemyTurn
 {
     public int value;
     public CardType turnType;
-    public ApplyType applyType;
 }

@@ -59,15 +59,19 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 return;
             }
 
-            if (hit.collider.CompareTag("Enemy") && card.cardData.applyType == ApplyType.Enemy)
+            if (card.cardData.applyType == ApplyType.Enemy && hit.collider.TryGetComponent(out Enemy enemy))
             {
-                Enemy enemy = hit.collider.GetComponent<Enemy>();
-                if (enemy != null)
+                if (card.cardData.attackType == AttackType.MultiEnemy)
+                {
+                    GameManager.Instance.PlayCardAllEnemies(card.cardData);
+                }
+                else
                 {
                     GameManager.Instance.PlayCardEnemy(card.cardData, enemy);
-                    Destroy(gameObject);
-                    return;
                 }
+
+                Destroy(gameObject);
+                return;
             }
         }
 

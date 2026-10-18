@@ -15,10 +15,9 @@ MonoBehaviour:
   enemyTurns:
   - value: 6
     turnType: 0
-    applyType: 0
   - value: 6
     turnType: 1
-    applyType: 1
   - value: 11
     turnType: 0
-    applyType: 1
+  - value: 8
+    turnType: 1

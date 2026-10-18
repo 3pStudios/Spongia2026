@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
 
     public bool CanPlayCard(CardSO card)
     {
-        return !isProcessingTurn && player != null && player.HasEnoughMana(card.cardCost);
+        return !isProcessingTurn && player.HasEnoughMana(card.cardCost);
     }
 
     public void PlayCardPlayer(CardSO card)
@@ -83,8 +83,14 @@ public class GameManager : MonoBehaviour
         if (!CanPlayCard(card)) return;
 
         player.SpendMana(card.cardCost);
-        player.ApplyCard(card);
         DiscardCard(card);
+        StartCoroutine(PlayerPlayCardSequence(card));
+    }
+    private IEnumerator PlayerPlayCardSequence(CardSO card)
+    {
+        isProcessingTurn = true;
+        yield return StartCoroutine(player.ApplyCardRoutine(card));
+        isProcessingTurn = false;
     }
 
     public void PlayCardEnemy(CardSO card, Enemy enemy)
@@ -102,10 +108,27 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(player.AttackEnemyRoutine(enemy, card));
         isProcessingTurn = false;
     }
+    public void PlayCardAllEnemies(CardSO card)
+    {
+        if (!CanPlayCard(card)) return;
+
+        player.SpendMana(card.cardCost);
+        DiscardCard(card);
+        StartCoroutine(PlayerAttackAllSequence(card));
+    }
+    private IEnumerator PlayerAttackAllSequence(CardSO card)
+    {
+        isProcessingTurn = true;
+        yield return StartCoroutine(player.AttackAllEnemiesRoutine(new List<Enemy>(enemiesAlive), card));
+        isProcessingTurn = false;
+    }
+
     public IEnumerator EnemyAttackSequence(Enemy enemy, int attackDamage)
     {
         yield return StartCoroutine(enemy.AttackPlayerRoutine(player, attackDamage));
     }
+
+
 
     public void EndTurn()
     {
@@ -119,10 +142,12 @@ public class GameManager : MonoBehaviour
 
         foreach (var enemy in new List<Enemy>(enemiesAlive))
         {
-            if (enemy != null)
-            {
-                yield return StartCoroutine(enemy.TickTurnRoutine(gameTurn));
-            }
+            yield return StartCoroutine(enemy.ExecuteTurnRoutine());
+        }
+
+        foreach (var enemy in new List<Enemy>(enemiesAlive))
+        {
+            yield return StartCoroutine(enemy.SetupNextTurnRoutine(gameTurn));
         }
 
         gameTurn++;

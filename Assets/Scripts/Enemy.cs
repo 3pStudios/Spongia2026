@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Turns Data")]
     public EnemyTurnsSO enemyTurnsSO;
-
+    private EnemyTurn currentTurn;
 
 
 
@@ -41,66 +41,54 @@ public class Enemy : MonoBehaviour
 
     public void SetupEnemy()
     {
-        SetupTurn(0);
+        StartCoroutine(SetupTurnRoutine(0));
     }
 
-    public void TakeDamage(int damage)
-    {
-        int unblockedDamage = Mathf.Max(0, damage - currentShield);
-        currentShield = Mathf.Max(0, currentShield - damage);
-        currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
-
-        UpdateUI();
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        GameManager.Instance.enemiesAlive.Remove(this);
-        Destroy(gameObject);
-        GameManager.Instance.CheckBattleOver();
-    }
-
-    public IEnumerator TickTurnRoutine(int turn)
+    public IEnumerator ExecuteTurnRoutine()
     {
         if (currentAttack > 0)
         {
             yield return StartCoroutine(GameManager.Instance.EnemyAttackSequence(this, currentAttack));
         }
-
-        int nextTurnIndex = (turn + 1) % enemyTurnsSO.enemyTurns.Length;
-        SetupTurn(nextTurnIndex);
-        yield return new WaitForSeconds(0.2f);
     }
 
-    private void SetupTurn(int turnIndex)
+    public IEnumerator SetupNextTurnRoutine(int turn)
+    {
+        int nextTurnIndex = (turn + 1) % enemyTurnsSO.enemyTurns.Length;
+        yield return StartCoroutine(SetupTurnRoutine(nextTurnIndex));
+    }
+
+    private IEnumerator SetupTurnRoutine(int turnIndex)
     {
         EnemyTurn turn = enemyTurnsSO.enemyTurns[turnIndex];
+
         if (turn.turnType == CardType.Attack)
         {
             currentAttack = turn.value;
             currentShield = 0;
+            UpdateUI();
         }
         else if (turn.turnType == CardType.Shield)
         {
-            currentShield = turn.value;
             currentAttack = 0;
+            yield return StartCoroutine(ApplyShieldRoutine(turn.value));
         }
-
-        UpdateUI();
     }
 
-    private void UpdateUI()
+    public IEnumerator ApplyShieldRoutine(int amount)
     {
-        healthText.text = $"{currentHealth}/{maxHealth}";
-        healthBarFill.fillAmount = (float)currentHealth / maxHealth;
-        attackIndicationText.text = currentAttack.ToString();
-        shieldIndicationText.text = currentShield.ToString();
+        yield return new WaitForSeconds(0.2f);
+        Vector3 originalScale = transform.localScale;
+        transform.localScale = originalScale * 1.15f;
+
+        currentShield = amount;
+        UpdateUI();
+
+        yield return new WaitForSeconds(0.4f);
+        transform.localScale = originalScale;
+        yield return new WaitForSeconds(0.1f);
     }
+
     public IEnumerator AttackPlayerRoutine(Player target, int attackDamage)
     {
         Vector3 originalPos = transform.position;
@@ -118,5 +106,35 @@ public class Enemy : MonoBehaviour
 
         transform.position = originalPos;
         
+    }
+
+    public void TakeDamage(int damage)
+    {
+        int unblockedDamage = Mathf.Max(0, damage - currentShield);
+        currentShield = Mathf.Max(0, currentShield - damage);
+        currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
+
+        UpdateUI();
+        CameraShake.Instance.Shake(0.1f, 0.08f);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        GameManager.Instance.enemiesAlive.Remove(this);
+        GameManager.Instance.CheckBattleOver();
+        Destroy(gameObject);
+    }
+
+    private void UpdateUI()
+    {
+        healthText.text = $"{currentHealth}/{maxHealth}";
+        healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+        attackIndicationText.text = currentAttack.ToString();
+        shieldIndicationText.text = currentShield.ToString();
     }
 }
