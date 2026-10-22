@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using UnityEditor;
 using System.Data;
+using UnityEditor.Experimental.GraphView;
 
 public class MapGen : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public GameObject RightPath;
 public GameObject LeftPath;
 public GameObject StraightPath;
 
+public GameObject[] StartPaths;
+public GameObject[] BossPaths;
 
 //Node types
 public GameObject BasicFight;
@@ -26,6 +29,9 @@ public int chanceEliteFight;
 public GameObject Chest;
 public int chanceChest;
 
+public GameObject Start;
+public GameObject Boss;
+
 
     class Node
     {
@@ -34,6 +40,8 @@ public int chanceChest;
         public bool leftPath;
         public bool straightPath;
         public string type;
+        public int StartPath;
+        public int BossPath;
 
         public Node()
         {
@@ -42,11 +50,20 @@ public int chanceChest;
             this.leftPath = false;
             this.type = "None";
             this.straightPath = false;
+            this.StartPath = -1;
+            this.BossPath = -1;
         }
     }
 
     void DrawMap(Node[,] map, int floors, int collums, Vector3 bottomLeftCorner, int horizontalDistance, int verticalDistance)
     {
+        float halfWidth = (collums-1)/2f;
+        Debug.Log(collums);
+        Debug.Log(halfWidth);
+
+        Instantiate(Start, new Vector3(bottomLeftCorner.x + halfWidth*horizontalDistance, bottomLeftCorner.y + -2*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+        Instantiate(Boss, new Vector3(bottomLeftCorner.x + halfWidth*horizontalDistance, bottomLeftCorner.y + (floors+1)*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+
         for (int floor = 0; floor < floors; floor++)
             for (int collum = 0; collum < collums; collum++)
             {
@@ -58,6 +75,11 @@ public int chanceChest;
                         Instantiate(RightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].straightPath)
                         Instantiate(StraightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    if (map[collum, floor].BossPath != -1)
+                        Instantiate(BossPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    if (map[collum, floor].StartPath != -1)
+                        Instantiate(StartPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+
 
                     int range;
 
@@ -70,8 +92,14 @@ public int chanceChest;
                     randomChance = Random.Range(1, range+1);
 
                     range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop + chanceChest;
-
-                    if (randomChance > range - chanceEliteFight)
+                    
+                    if (floor == 0)
+                        Instantiate(BasicFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (floor == floors-1)
+                        Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (floor == floors/2)
+                        Instantiate(Chest, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceEliteFight)
                         Instantiate(EliteFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     else if (randomChance > range - chanceEliteFight - chanceCampfire)
                         Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
@@ -130,6 +158,8 @@ public int chanceChest;
             map[pos, i].inMap = true;
             int min = 0;
             int max = 3;
+            if (i == 0)
+                map[pos, i].StartPath = pos;
             if (pos == 0 || map[pos-1, i].rightPath == true)
             {
                 min = 1;
@@ -138,24 +168,30 @@ public int chanceChest;
             {
                 max = 2;
             }
-
-            direction = Random.Range(min, max);
-
-            if (direction == 0)
+            if (i < floors - 1)
             {
-                map[pos, i].leftPath = true;
-                pos -= 1;
-            }
-            else if (direction == 2)
-            {
-                map[pos, i].rightPath = true;
-                pos += 1;
+                direction = Random.Range(min, max);
+                if (direction == 0)
+                {
+                    map[pos, i].leftPath = true;
+                    pos -= 1;
+                }
+                else if (direction == 2)
+                {
+                    map[pos, i].rightPath = true;
+                    pos += 1;
+                }
+                else
+                {
+                    map[pos, i].straightPath = true;
+                }
             }
             else
-            {
-                map[pos, i].straightPath = true;
+                map[pos, i].BossPath = pos;
+
+                
             }
-        }
+
     }
 
 
