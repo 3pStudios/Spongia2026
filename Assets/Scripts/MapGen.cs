@@ -23,6 +23,8 @@ public GameObject Campfire;
 public int chanceCampfire;
 public GameObject EliteFight;
 public int chanceEliteFight;
+public GameObject Chest;
+public int chanceChest;
 
 
     class Node
@@ -59,23 +61,27 @@ public int chanceEliteFight;
 
                     int range;
 
-                    if (floor < 5)
+                    if (floor < 4)
                         range = chanceBasicFight + chanceEvent + chanceShop;
                     else
-                        range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop;
+                        range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop + chanceChest;
                     int randomChance;
 
-                    randomChance = Random.Range(1, range);
+                    randomChance = Random.Range(1, range+1);
 
-                    if (randomChance > range - chanceBasicFight)
-                        Instantiate(BasicFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    else if (randomChance > range - chanceBasicFight - chanceCampfire)
-                        Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight)
+                    range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop + chanceChest;
+
+                    if (randomChance > range - chanceEliteFight)
                         Instantiate(EliteFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent)
+                    else if (randomChance > range - chanceEliteFight - chanceCampfire)
+                        Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceEliteFight - chanceCampfire - chanceChest)
+                        Instantiate(Chest, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceChest)
+                        Instantiate(BasicFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceChest)
                         Instantiate(Event, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceShop)
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceShop - chanceChest)
                         Instantiate(Shop, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
 
                     //Instantiate(Tile, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
