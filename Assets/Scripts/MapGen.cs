@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Text;
+using System.Collections.Generic;
+using UnityEditor;
+using System.Data;
 
 public class MapGen : MonoBehaviour
 {
@@ -7,6 +10,20 @@ public GameObject Tile;
 public GameObject RightPath;
 public GameObject LeftPath;
 public GameObject StraightPath;
+
+
+//Node types
+public GameObject BasicFight;
+public int chanceBasicFight;
+public GameObject Shop;
+public int chanceShop;
+public GameObject Event;
+public int chanceEvent;
+public GameObject Campfire;
+public int chanceCampfire;
+public GameObject EliteFight;
+public int chanceEliteFight;
+
 
     class Node
     {
@@ -33,13 +50,36 @@ public GameObject StraightPath;
             {
                 if (map[collum, floor].inMap)
                 {
-                    Instantiate(Tile, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].leftPath)
                         Instantiate(LeftPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].rightPath)
                         Instantiate(RightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].straightPath)
                         Instantiate(StraightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+
+                    int range;
+
+                    if (floor < 5)
+                        range = chanceBasicFight + chanceEvent + chanceShop;
+                    else
+                        range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop;
+                    int randomChance;
+
+                    randomChance = Random.Range(1, range);
+
+                    if (randomChance > range - chanceBasicFight)
+                        Instantiate(BasicFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire)
+                        Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight)
+                        Instantiate(EliteFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent)
+                        Instantiate(Event, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceShop)
+                        Instantiate(Shop, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+
+                    //Instantiate(Tile, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    
 
                 }
             }
@@ -140,7 +180,7 @@ public GameObject StraightPath;
             GeneratePath(map, start, floors, collums);
         }
 
-        LogMap(map, floors, collums);
+        //LogMap(map, floors, collums);
 
         DrawMap(map, floors, collums, bottomLeftCorner, horizontalDistance, verticalDistance);
 
@@ -148,6 +188,6 @@ public GameObject StraightPath;
 
     public void TestGen()
     {
-        GenerateMap(15, 7, 6, new Vector3(0,0,0), 2, 2);
+        GenerateMap(12, 6, 5, new Vector3(0,0,0), 2, 2);
     }
 }
