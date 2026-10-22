@@ -4,6 +4,9 @@ using System.Text;
 public class MapGen : MonoBehaviour
 {
 public GameObject Tile;
+public GameObject RightPath;
+public GameObject LeftPath;
+public GameObject StraightPath;
 
     class Node
     {
@@ -21,6 +24,25 @@ public GameObject Tile;
             this.type = "None";
             this.straightPath = false;
         }
+    }
+
+    void DrawMap(Node[,] map, int floors, int collums, Vector3 bottomLeftCorner, int horizontalDistance, int verticalDistance)
+    {
+        for (int floor = 0; floor < floors; floor++)
+            for (int collum = 0; collum < collums; collum++)
+            {
+                if (map[collum, floor].inMap)
+                {
+                    Instantiate(Tile, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    if (map[collum, floor].leftPath)
+                        Instantiate(LeftPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    if (map[collum, floor].rightPath)
+                        Instantiate(RightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+                    if (map[collum, floor].straightPath)
+                        Instantiate(StraightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+
+                }
+            }
     }
 
     void LogMap(Node[,] map, int floors, int collums)
@@ -91,7 +113,7 @@ public GameObject Tile;
     }
 
 
-    public void GenerateMap(int floors, int collums, int numOfPaths)
+    public void GenerateMap(int floors, int collums, int numOfPaths, Vector3 bottomLeftCorner, int horizontalDistance, int verticalDistance)
     {
         Node[,] map = new Node[collums, floors];
 
@@ -120,10 +142,12 @@ public GameObject Tile;
 
         LogMap(map, floors, collums);
 
+        DrawMap(map, floors, collums, bottomLeftCorner, horizontalDistance, verticalDistance);
+
     }
 
     public void TestGen()
     {
-        GenerateMap(15, 7, 6);
+        GenerateMap(15, 7, 6, new Vector3(0,0,0), 2, 2);
     }
 }
