@@ -119,19 +119,23 @@ public class Player : MonoBehaviour
         for (int i = 0; i < card.hitCount; i++)
         {
             if (target == null || target.currentHealth <= 0) break;
+
             transform.position = lungePos;
             yield return new WaitForSeconds(0.08f);
 
-            yield return StartCoroutine(FireArrowRoutine(target, card.damage));
+            yield return StartCoroutine(FireArrowRoutine(target, card));
 
             transform.position = originalPos;
+
             if (card.hitCount > 1)
             {
                 yield return new WaitForSeconds(0.12f);
             }
         }
+
         transform.position = originalPos;
     }
+
     public IEnumerator AttackAllEnemiesRoutine(List<Enemy> targets, CardSO card)
     {
         Vector3 originalPos = transform.position;
@@ -139,6 +143,7 @@ public class Player : MonoBehaviour
 
         transform.position = lungePos;
         yield return new WaitForSeconds(0.08f);
+
         for (int hit = 0; hit < card.hitCount; hit++)
         {
             Coroutine lastArrowRoutine = null;
@@ -147,12 +152,15 @@ public class Player : MonoBehaviour
             {
                 Enemy target = targets[i];
                 if (target == null || target.currentHealth <= 0) continue;
-                lastArrowRoutine = StartCoroutine(FireArrowRoutine(target, card.damage));
+
+                lastArrowRoutine = StartCoroutine(FireArrowRoutine(target, card));
+
                 if (i < targets.Count - 1)
                 {
                     yield return new WaitForSeconds(0.1f);
                 }
             }
+
             if (lastArrowRoutine != null)
             {
                 yield return lastArrowRoutine;
@@ -168,8 +176,7 @@ public class Player : MonoBehaviour
         transform.position = originalPos;
     }
 
-
-    private IEnumerator FireArrowRoutine(Enemy target, int damage)
+    private IEnumerator FireArrowRoutine(Enemy target, CardSO card)
     {
         GameObject arrowObj = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Projectile projectile = arrowObj.GetComponent<Projectile>();
@@ -178,7 +185,15 @@ public class Player : MonoBehaviour
 
         if (target != null && target.currentHealth > 0)
         {
-            target.TakeDamage(damage);
+            if (card.damage > 0)
+            {
+                target.TakeDamage(card.damage);
+            }
+
+            if (card.bleedAmount > 0)
+            {
+                target.ApplyBleed(card.bleedAmount);
+            }
         }
     }
 }

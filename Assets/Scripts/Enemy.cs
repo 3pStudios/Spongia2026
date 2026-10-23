@@ -32,7 +32,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform shootPoint;
 
 
-
+    [Header("Debuffs")]
+    public int currentBleed = 0;
+    [SerializeField] private TextMeshProUGUI bleedText;
 
     private void Start()
     {
@@ -46,6 +48,21 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator ExecuteTurnRoutine()
     {
+        if (currentBleed > 0)
+        {
+            currentBleed--;
+            UpdateUI();
+
+            if (currentBleed > 0)
+            {
+                yield return new WaitForSeconds(0.15f);
+                TakeDirectDamage(currentBleed);
+                yield return new WaitForSeconds(0.2f);
+            }
+
+            if (currentHealth <= 0) yield break;
+        }
+
         if (currentAttack > 0)
         {
             yield return StartCoroutine(GameManager.Instance.EnemyAttackSequence(this, currentAttack));
@@ -136,5 +153,31 @@ public class Enemy : MonoBehaviour
         healthBarFill.fillAmount = (float)currentHealth / maxHealth;
         attackIndicationText.text = currentAttack.ToString();
         shieldIndicationText.text = currentShield.ToString();
+
+        if (bleedText != null)
+        {
+            bleedText.gameObject.SetActive(currentBleed > 0);
+            bleedText.text = currentBleed > 0 ? $"{currentBleed}" : "";
+        }
+    }
+
+
+    public void ApplyBleed(int amount)
+    {
+        if (amount <= 0) return;
+
+        currentBleed += amount;
+        UpdateUI();
+    }
+    public void TakeDirectDamage(int damage)
+    {
+        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        UpdateUI();
+        CameraShake.Instance.Shake(0.08f, 0.06f);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 }

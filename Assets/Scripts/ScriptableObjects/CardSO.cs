@@ -32,6 +32,8 @@ public class CardSO : ScriptableObject
 
 
 
+
+
     [Header("Attack Properties")]
     public int damage;
     public AttackType attackType;
@@ -41,4 +43,8 @@ public class CardSO : ScriptableObject
 
     [Header("Shield Properties")]
     public int shieldValue;
+
+
+    [Header("Status Properties")]
+    public int bleedAmount = 0;
 }
