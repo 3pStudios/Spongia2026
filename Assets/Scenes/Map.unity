@@ -513,15 +513,15 @@ MonoBehaviour:
   - {fileID: 1498784517}
   - {fileID: 1209117625}
   BasicFight: {fileID: 1967839375}
-  chanceBasicFight: 45
+  chanceBasicFight: 50
   Shop: {fileID: 1142792038}
-  chanceShop: 8
+  chanceShop: 5
   Event: {fileID: 655486259}
-  chanceEvent: 40
+  chanceEvent: 30
   Campfire: {fileID: 2143719019}
-  chanceCampfire: 10
+  chanceCampfire: 16
   EliteFight: {fileID: 1562037866}
-  chanceEliteFight: 10
+  chanceEliteFight: 12
   Chest: {fileID: 121139446}
   chanceChest: 0
   Start: {fileID: 107171344}
