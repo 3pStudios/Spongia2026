@@ -180,19 +180,6 @@ public GameObject Boss;
                     if (map[collum, floor].StartPath != -1)
                         Instantiate(StartPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
 
-
-                    //int range;
-                    
-                    //if (floor < 4)
-                    //   range = chanceBasicFight + chanceEvent + chanceShop;
-                    //else
-                    //    range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop + chanceChest;
-                    //int randomChance;
-
-                    //randomChance = Random.Range(1, range+1);
-
-                    //range = chanceBasicFight + chanceCampfire + chanceEliteFight + chanceEvent + chanceShop + chanceChest;
-                    
                     if (floor < 4)
                     {
                         map[collum, floor].cantBe.Add("EliteFight");
@@ -208,22 +195,6 @@ public GameObject Boss;
                         CreateNode(map, floor, collum, "Chest", bottomLeftCorner, horizontalDistance, verticalDistance);
                     else
                         CreateNode(map, floor, collum, ChooseNodeType(map[collum, floor].cantBe), bottomLeftCorner, horizontalDistance, verticalDistance);
-                    //else if (randomChance > range - chanceEliteFight)
-                    //    Instantiate(EliteFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    //else if (randomChance > range - chanceEliteFight - chanceCampfire)
-                    //    Instantiate(Campfire, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    //else if (randomChance > range - chanceEliteFight - chanceCampfire - chanceChest)
-                    //    Instantiate(Chest, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    //else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceChest)
-                    //    Instantiate(BasicFight, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    //else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceChest)
-                    //    Instantiate(Event, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    //else if (randomChance > range - chanceBasicFight - chanceCampfire - chanceEliteFight - chanceEvent - chanceShop - chanceChest)
-                    //    Instantiate(Shop, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-
-                    //Instantiate(Tile, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    
-
                 }
             }
     }
@@ -334,7 +305,6 @@ public GameObject Boss;
             GeneratePath(map, start, floors, collums);
         }
 
-        //LogMap(map, floors, collums);
 
         DrawMap(map, floors, collums, bottomLeftCorner, horizontalDistance, verticalDistance);
 
