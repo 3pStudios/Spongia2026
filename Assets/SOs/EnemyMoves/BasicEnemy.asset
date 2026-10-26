@@ -13,11 +13,15 @@ MonoBehaviour:
   m_Name: BasicEnemy
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTurnsSO
   enemyTurns:
-  - value: 6
-    turnType: 0
-  - value: 6
-    turnType: 1
-  - value: 11
-    turnType: 0
-  - value: 8
-    turnType: 1
+  - attack: 6
+    shield: 0
+    bleed: 0
+  - attack: 0
+    shield: 6
+    bleed: 0
+  - attack: 0
+    shield: 11
+    bleed: 0
+  - attack: 0
+    shield: 8
+    bleed: 0

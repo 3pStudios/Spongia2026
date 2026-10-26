@@ -259,6 +259,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 857a4890471884b4483f8609ed4f33e5, type: 2}
   - {fileID: 11400000, guid: 7d417f6ae93655f409bb409af8c33c4d, type: 2}
   - {fileID: 11400000, guid: 3eb058ad050f6754581d6880fcd7679e, type: 2}
+  - {fileID: 11400000, guid: ebec7f28822a2364784db3d2b92fd056, type: 2}
+  - {fileID: 11400000, guid: ebec7f28822a2364784db3d2b92fd056, type: 2}
   drawDeck: []
   handDeck: []
   discardDeck: []
@@ -607,11 +609,15 @@ MonoBehaviour:
   maxHealth: 20
   currentHealth: 20
   currentShield: 0
+  currentBleed: 0
   maxMana: 3
   currentMana: 3
+  hasBloodletting: 0
+  hasThornyShield: 0
   healthText: {fileID: 2012379207}
   healthBarFill: {fileID: 2039459618}
   manaText: {fileID: 1794802328}
+  bleedText: {fileID: 0}
   arrowPrefab: {fileID: 5462573853803666163, guid: 01a99a80aa04eca428827e6163f2c17c,
     type: 3}
   shootPoint: {fileID: 1112247955}
@@ -1269,10 +1275,13 @@ MonoBehaviour:
   currentHealth: 20
   currentShield: 0
   currentAttack: 0
+  currentBleed: 0
+  isFlying: 0
   enemyTurnsSO: {fileID: 11400000, guid: 4a2790489b8defa4885d068c9f9e41c8, type: 2}
   healthText: {fileID: 1443085717}
   shieldIndicationText: {fileID: 2041297350}
   attackIndicationText: {fileID: 848264494}
+  bleedText: {fileID: 0}
   healthBarFill: {fileID: 330051833}
   arrowPrefab: {fileID: 5462573853803666163, guid: 01a99a80aa04eca428827e6163f2c17c,
     type: 3}
@@ -2878,10 +2887,13 @@ MonoBehaviour:
   currentHealth: 20
   currentShield: 0
   currentAttack: 0
+  currentBleed: 0
+  isFlying: 0
   enemyTurnsSO: {fileID: 11400000, guid: 4a2790489b8defa4885d068c9f9e41c8, type: 2}
   healthText: {fileID: 1262498088}
   shieldIndicationText: {fileID: 807889681}
   attackIndicationText: {fileID: 1330097931}
+  bleedText: {fileID: 0}
   healthBarFill: {fileID: 1655175102}
   arrowPrefab: {fileID: 5462573853803666163, guid: 01a99a80aa04eca428827e6163f2c17c,
     type: 3}

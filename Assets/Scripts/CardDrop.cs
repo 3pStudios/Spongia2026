@@ -52,24 +52,16 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         if (hit.collider != null)
         {
-            if (hit.collider.CompareTag("Player") && card.cardData.applyType == ApplyType.Player)
+            if (card.cardData.target == CardTarget.Self && hit.collider.TryGetComponent(out Player _))
             {
-                GameManager.Instance.PlayCardPlayer(card.cardData);
+                GameManager.Instance.PlayCard(card.cardData);
                 Destroy(gameObject);
                 return;
             }
 
-            if (card.cardData.applyType == ApplyType.Enemy && hit.collider.TryGetComponent(out Enemy enemy))
+            if (card.cardData.target != CardTarget.Self && hit.collider.TryGetComponent(out Enemy enemy))
             {
-                if (card.cardData.attackType == AttackType.MultiEnemy)
-                {
-                    GameManager.Instance.PlayCardAllEnemies(card.cardData);
-                }
-                else
-                {
-                    GameManager.Instance.PlayCardEnemy(card.cardData, enemy);
-                }
-
+                GameManager.Instance.PlayCard(card.cardData, enemy);
                 Destroy(gameObject);
                 return;
             }
