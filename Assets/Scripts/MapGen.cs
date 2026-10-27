@@ -1,13 +1,6 @@
 using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
-using UnityEditor;
-using System.Data;
-using UnityEditor.Experimental.GraphView;
-using System.Xml;
-using UnityEngine.UIElements;
-using Unity.VisualScripting;
-using TMPro;
 
 public class MapGen : MonoBehaviour
 {

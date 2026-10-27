@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     [Header("UI & Spawning")]
     [SerializeField] private GameObject cardPlace;
     [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private RewardUI rewardUI;
 
     private void Awake()
     {
@@ -39,6 +40,11 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (RunManager.Instance != null && RunManager.Instance.masterDeck.Count > 0)
+        {
+            masterDeck = new List<CardSO>(RunManager.Instance.masterDeck);
+        }
+
         gameTurn = 0;
         drawDeck = new List<CardSO>(masterDeck);
         drawDeck.Shuffle();
@@ -216,8 +222,16 @@ public class GameManager : MonoBehaviour
     private IEnumerator VictoryRoutine()
     {
         isProcessingTurn = true;
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("Start Menu");
+        yield return new WaitForSeconds(0.8f);
+
+        if (rewardUI != null)
+        {
+            rewardUI.ShowRewards();
+        }
+        else
+        {
+            SceneManager.LoadScene("Start Menu");
+        }
     }
 
     private IEnumerator GameOverRoutine()

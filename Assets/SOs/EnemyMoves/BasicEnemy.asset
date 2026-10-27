@@ -19,8 +19,8 @@ MonoBehaviour:
   - attack: 0
     shield: 6
     bleed: 0
-  - attack: 0
-    shield: 11
+  - attack: 11
+    shield: 0
     bleed: 0
   - attack: 0
     shield: 8
