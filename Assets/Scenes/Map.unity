@@ -498,6 +498,11 @@ MonoBehaviour:
   RightPath: {fileID: 2086730678}
   LeftPath: {fileID: 1759626757}
   StraightPath: {fileID: 1467913451}
+  bottomLeftCorner: {x: -5, y: 0, z: 0}
+  floors: 12
+  collums: 6
+  horizontalDistance: 2
+  verticalDistance: 2
   StartPaths:
   - {fileID: 595496812}
   - {fileID: 982555185}
@@ -3146,6 +3151,7 @@ GameObject:
   - component: {fileID: 1848987123}
   - component: {fileID: 1848987122}
   - component: {fileID: 1848987125}
+  - component: {fileID: 1848987126}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -3271,6 +3277,21 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1848987126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848987121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8d787a7d0bd1ff4e9e325fb1856f699, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraScroll
+  scrollSpeed: 1
+  minY: -2
+  maxY: 24
 --- !u!1 &1859180310
 GameObject:
   m_ObjectHideFlags: 0

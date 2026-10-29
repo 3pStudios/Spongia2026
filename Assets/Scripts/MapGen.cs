@@ -9,6 +9,12 @@ public GameObject RightPath;
 public GameObject LeftPath;
 public GameObject StraightPath;
 
+public Vector3 bottomLeftCorner;
+public int floors;
+public int collums;
+public int horizontalDistance;
+public int verticalDistance;
+
 public GameObject[] StartPaths;
 public GameObject[] BossPaths;
 
@@ -314,7 +320,7 @@ public GameObject Boss;
 
     public void TestGen()
     {
-        GenerateMap(12, 6, 5, new Vector3(0,0,0), 2, 2);
+        GenerateMap(floors, collums, collums-1, bottomLeftCorner, horizontalDistance, verticalDistance);
     }
 }
 
