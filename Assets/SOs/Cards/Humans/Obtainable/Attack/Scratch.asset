@@ -16,7 +16,7 @@ MonoBehaviour:
   cardCost: 1
   cardDescription: Deal 3 damage and apply 2 bleed to one target
   target: 0
-  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
+  cardImage: {fileID: -8540397549773956295, guid: 5155ca5bc19d8c6489cbc82f86f69a1e,
     type: 3}
   damage: 3
   hitCount: 1

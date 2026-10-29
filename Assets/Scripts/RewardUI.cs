@@ -90,6 +90,11 @@ public class RewardUI : MonoBehaviour
         {
             panel.SetActive(false);
         }
-        SceneManager.LoadScene(nextSceneName);
+
+        string targetScene = RunManager.Instance != null 
+            ? RunManager.Instance.mapSceneName 
+            : nextSceneName;
+
+        SceneManager.LoadScene(targetScene);
     }
 }

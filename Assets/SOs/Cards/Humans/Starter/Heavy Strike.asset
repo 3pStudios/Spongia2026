@@ -15,11 +15,15 @@ MonoBehaviour:
   cardName: Heavy Strike
   cardCost: 2
   cardDescription: Deal 12 damage to one target
-  cardType: 0
-  applyType: 1
-  cardImage: {fileID: 2441674748022358507, guid: 48cfa992b6eda884d83fedd3a56fdf44,
+  target: 0
+  cardImage: {fileID: 6588337356298327688, guid: 5d0afafc00f10ad4987f8961a5bebea9,
     type: 3}
   damage: 12
-  attackType: 0
   hitCount: 1
-  shieldValue: 0
+  shield: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0

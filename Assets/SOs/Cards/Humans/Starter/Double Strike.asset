@@ -16,7 +16,7 @@ MonoBehaviour:
   cardCost: 2
   cardDescription: Deal 4 damage to one target twice
   target: 0
-  cardImage: {fileID: 3531089406834146607, guid: c9ea5f3e9b4f1d140a2bf16493307586,
+  cardImage: {fileID: 5579775841819883264, guid: 6f343e60de73c0a49a21c2953e0205b8,
     type: 3}
   damage: 4
   hitCount: 2

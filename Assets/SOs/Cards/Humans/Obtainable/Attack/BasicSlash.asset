@@ -16,7 +16,7 @@ MonoBehaviour:
   cardCost: 1
   cardDescription: Deal 3 damage to ALL targets
   target: 1
-  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
+  cardImage: {fileID: 5388151048507491624, guid: 41897725f45d8f944b951fea14e52020,
     type: 3}
   damage: 3
   hitCount: 1

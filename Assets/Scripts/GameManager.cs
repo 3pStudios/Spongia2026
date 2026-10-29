@@ -23,7 +23,12 @@ public class GameManager : MonoBehaviour
     public Player player;
     public List<Enemy> enemiesAlive = new();
 
-    [Header("UI & Spawning")]
+    [Header("Spawning")]
+    [SerializeField] private Transform[] groundSpawnPoints;
+    [SerializeField] private Transform[] flyingSpawnPoints;
+    public Encounter currentEncounter;
+
+    [Header("UI")]
     [SerializeField] private GameObject cardPlace;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private RewardUI rewardUI;
@@ -49,13 +54,53 @@ public class GameManager : MonoBehaviour
         drawDeck = new List<CardSO>(masterDeck);
         drawDeck.Shuffle();
 
-        foreach (var enemy in enemiesAlive)
-        {
-            enemy.SetupEnemy();
-        }
+        Encounter encounterToSpawn = (RunManager.Instance != null && RunManager.Instance.currentEncounter != null)
+            ? RunManager.Instance.currentEncounter
+            : currentEncounter;
+
+        SpawnEncounter(encounterToSpawn);
 
         StartCoroutine(StartGameRoutine());
     }
+
+    public void SpawnEncounter(Encounter encounter)
+    {
+        foreach (var enemy in enemiesAlive)
+        {
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+        enemiesAlive.Clear();
+
+        if (encounter == null || encounter.enemyPrefabs == null) return;
+
+        int groundCount = 0;
+        int flyingCount = 0;
+
+        foreach (GameObject prefab in encounter.enemyPrefabs)
+        {
+            if (prefab == null) continue;
+
+            Enemy enemyComp = prefab.GetComponent<Enemy>();
+            bool isFlying = enemyComp != null && enemyComp.isFlying;
+
+            Transform[] spawnArray = isFlying ? flyingSpawnPoints : groundSpawnPoints;
+            int count = isFlying ? flyingCount++ : groundCount++;
+
+            if (spawnArray == null || count >= spawnArray.Length) continue;
+
+            Transform spawnPoint = spawnArray[count];
+            if (spawnPoint == null) continue;
+
+            GameObject enemyObj = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+            Enemy spawnedEnemy = enemyObj.GetComponent<Enemy>();
+            enemiesAlive.Add(spawnedEnemy);
+            spawnedEnemy.SetupEnemy();
+        }
+    }
+
 
     private IEnumerator StartGameRoutine()
     {

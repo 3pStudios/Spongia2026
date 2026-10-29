@@ -1,15 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RunManager : MonoBehaviour
 {
     public static RunManager Instance { get; private set; }
 
+    [Header("Progress")]
+    public int currentFloor = -1;
+    public string mapSceneName = "Map";
+    public string combatSceneName = "SampleScene";
+
+    [Header("Deck")]
     public List<CardSO> masterDeck = new();
     public List<CardSO> starterDeck = new();
     public List<CardSO> humanRewardPool = new();
-
     private List<CardSO> currentRewardPool = new();
+
+    [Header("Encounters")]
+    public Encounter currentEncounter;
+    public List<Encounter> earlyEncounters = new();
+    public List<Encounter> lateEncounters = new();
+    public List<Encounter> eliteEncounters = new();
+    public Encounter bossEncounter;
 
     private void Awake()
     {
@@ -26,6 +39,7 @@ public class RunManager : MonoBehaviour
 
     public void ResetRun()
     {
+        currentFloor = -1;
         masterDeck = new List<CardSO>(starterDeck);
         currentRewardPool = new List<CardSO>(humanRewardPool);
     }
@@ -53,5 +67,33 @@ public class RunManager : MonoBehaviour
         }
 
         return rewards;
+    }
+
+    public void StartCombatFromNode(string nodeType, int floor)
+    {
+        currentFloor = floor;
+
+        if (nodeType == "Boss")
+        {
+            currentEncounter = bossEncounter;
+        }
+        else if (nodeType == "EliteFight")
+        {
+            currentEncounter = GetRandomEncounter(eliteEncounters);
+        }
+        else
+        {
+            currentEncounter = floor < 3 
+                ? GetRandomEncounter(earlyEncounters) 
+                : GetRandomEncounter(lateEncounters);
+        }
+
+        SceneManager.LoadScene(combatSceneName);
+    }
+
+    private Encounter GetRandomEncounter(List<Encounter> pool)
+    {
+        if (pool == null || pool.Count == 0) return currentEncounter;
+        return pool[Random.Range(0, pool.Count)];
     }
 }
