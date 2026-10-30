@@ -1,9 +1,12 @@
 using UnityEngine;
 using System.Text;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class MapGen : MonoBehaviour
 {
+
+static Node[,] mapData;
 public GameObject Tile;
 public GameObject RightPath;
 public GameObject LeftPath;
@@ -43,6 +46,8 @@ void Awake()
             {"EliteFight", chanceEliteFight},
             {"Chest", chanceChest}
         };
+
+        TestGen();
     }
 
 public GameObject Start;
@@ -187,54 +192,28 @@ public GameObject Boss;
                         Instantiate(BossPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].StartPath != -1)
                         Instantiate(StartPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-
-                    if (floor < 4)
-                    {
-                        map[collum, floor].cantBe.Add("EliteFight");
-                        map[collum, floor].cantBe.Add("Campfire");
+                    if (map[collum, floor].type == "None")
+                    {   
+                        if (floor < 4)
+                        {
+                            map[collum, floor].cantBe.Add("EliteFight");
+                            map[collum, floor].cantBe.Add("Campfire");
+                        }
+                        if (floor == floors-2)
+                            map[collum, floor].cantBe.Add("Campfire");
+                        if (floor == 0)                     
+                            map[collum, floor].type = "BasicFight";
+                        else if (floor == floors-1)
+                            map[collum, floor].type = "Campfire";
+                        else if (floor == floors/2)
+                            map[collum, floor].type = "Chest";
+                        else
+                            map[collum, floor].type = ChooseNodeType(map[collum, floor].cantBe);
                     }
-                    if (floor == floors-2)
-                        map[collum, floor].cantBe.Add("Campfire");
-                    if (floor == 0)
-                        CreateNode(map, floor, collum, "BasicFight", bottomLeftCorner, horizontalDistance, verticalDistance);
-                    else if (floor == floors-1)
-                        CreateNode(map, floor, collum, "Campfire", bottomLeftCorner, horizontalDistance, verticalDistance);
-                    else if (floor == floors/2)
-                        CreateNode(map, floor, collum, "Chest", bottomLeftCorner, horizontalDistance, verticalDistance);
-                    else
-                        CreateNode(map, floor, collum, ChooseNodeType(map[collum, floor].cantBe), bottomLeftCorner, horizontalDistance, verticalDistance);
+
+                    CreateNode(map, floor, collum, map[collum, floor].type, bottomLeftCorner, horizontalDistance, verticalDistance);
                 }
             }
-    }
-
-    void LogMap(Node[,] map, int floors, int collums)
-    {
-        StringBuilder sb = new StringBuilder();
-
-        // top floor first, so floor 0 is at the bottom
-        for (int y = floors - 1; y >= 0; y--)
-        {
-            for (int x = 0; x < collums; x++)
-            {
-                Node n = map[x, y];
-
-                if (!n.inMap)
-                {
-                    sb.Append(" . ");
-                }
-                else
-                {
-                    sb.Append(n.leftPath ? '\\' : ' ');
-                    sb.Append(n.straightPath ? '|' : 'o');
-                    sb.Append(n.rightPath ? '/' : ' ');
-                }
-
-                sb.Append(' ');
-            }
-            sb.AppendLine();
-        }
-
-        Debug.Log(sb.ToString());
     }
 
     void GeneratePath(Node[,] map, int pos, int floors, int collums)
@@ -316,11 +295,17 @@ public GameObject Boss;
 
         DrawMap(map, floors, collums, bottomLeftCorner, horizontalDistance, verticalDistance);
 
+        mapData = map;
+
     }
 
     public void TestGen()
     {
+        if (mapData == null)
         GenerateMap(floors, collums, collums-1, bottomLeftCorner, horizontalDistance, verticalDistance);
+        else
+        DrawMap(mapData, floors, collums, bottomLeftCorner, horizontalDistance, verticalDistance);
+
     }
 }
 
