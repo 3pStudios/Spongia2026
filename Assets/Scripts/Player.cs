@@ -36,7 +36,16 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        if (RunManager.Instance != null)
+        {
+            maxHealth = RunManager.Instance.playerMaxHealth;
+            currentHealth = RunManager.Instance.playerCurrentHealth;
+        }
+        else
+        {
+            currentHealth = maxHealth;
+        }
+
         currentMana = maxMana;
         UpdateUI();
     }
@@ -86,6 +95,10 @@ public class Player : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
 
         UpdateUI();
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.playerCurrentHealth = currentHealth;
+        }
         CameraShake.Instance.Shake(0.15f, 0.12f);
 
         if (currentHealth <= 0)
@@ -98,6 +111,10 @@ public class Player : MonoBehaviour
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         UpdateUI();
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.playerCurrentHealth = currentHealth;
+        }
         CameraShake.Instance.Shake(0.1f, 0.08f);
 
         if (currentHealth <= 0)

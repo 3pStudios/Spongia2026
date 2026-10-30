@@ -378,7 +378,7 @@ GameObject:
   - component: {fileID: 1789889596038893219}
   - component: {fileID: 2804761030269116769}
   m_Layer: 0
-  m_Name: Enemy1
+  m_Name: WarCrow
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -462,13 +462,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ec7a170d44c33e47bc96f73a99de6fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDrop
-  maxHealth: 20
-  currentHealth: 20
+  maxHealth: 9
+  currentHealth: 9
   currentShield: 0
   currentAttack: 0
   currentBleed: 0
-  isFlying: 0
-  enemyTurnsSO: {fileID: 11400000, guid: 4a2790489b8defa4885d068c9f9e41c8, type: 2}
+  isFlying: 1
+  enemyTurnsSO: {fileID: 11400000, guid: 6b92fb2d2afc9cf4b948268005f9adf0, type: 2}
   healthText: {fileID: 1922978295734215890}
   shieldIndicationText: {fileID: 6617903976873712339}
   attackIndicationText: {fileID: 7470953347358947529}
@@ -910,7 +910,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
-  m_Color: {r: 1, g: 0.45882356, b: 0.48143312, a: 1}
+  m_Color: {r: 0.381132, g: 0.35308644, b: 0.35308644, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1002,7 +1002,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
     type: 3}
-  m_Color: {r: 1, g: 0.4299586, b: 0.39215684, a: 1}
+  m_Color: {r: 0.381132, g: 0.35308644, b: 0.35308644, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

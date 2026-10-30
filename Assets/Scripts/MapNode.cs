@@ -19,7 +19,7 @@ public class MapNode : MonoBehaviour
 
         if (floor == RunManager.Instance.currentFloor + 1)
         {
-            RunManager.Instance.StartCombatFromNode(nodeType, floor);
+            RunManager.Instance.SelectNode(nodeType, floor);
         }
     }
 }

@@ -45,6 +45,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (RunManager.Instance != null && RunManager.Instance.isChestRoom)
+        {
+            isProcessingTurn = true;
+            if (rewardUI != null)
+            {
+                rewardUI.ShowRewards();
+            }
+            return;
+        }
+
         if (RunManager.Instance != null && RunManager.Instance.masterDeck.Count > 0)
         {
             masterDeck = new List<CardSO>(RunManager.Instance.masterDeck);
@@ -268,6 +278,13 @@ public class GameManager : MonoBehaviour
     {
         isProcessingTurn = true;
         yield return new WaitForSeconds(0.8f);
+
+        // If the Boss was defeated, player won the game!
+        if (RunManager.Instance != null && RunManager.Instance.isBossFight)
+        {
+            SceneManager.LoadScene("Start Menu"); // Or a Victory Scene
+            yield break;
+        }
 
         if (rewardUI != null)
         {

@@ -6,11 +6,15 @@ using Unity.VisualScripting;
 public class MapGen : MonoBehaviour
 {
 
-static Node[,] mapData;
-public GameObject Tile;
-public GameObject RightPath;
-public GameObject LeftPath;
-public GameObject StraightPath;
+    static Node[,] mapData;
+    public static void ResetMapData()
+    {
+        mapData = null;
+    }
+    public GameObject Tile;
+    public GameObject RightPath;
+    public GameObject LeftPath;
+    public GameObject StraightPath;
 
 public Vector3 bottomLeftCorner;
 public int floors;
@@ -175,7 +179,11 @@ public GameObject Boss;
         float halfWidth = (collums-1)/2f;
 
         Instantiate(Start, new Vector3(bottomLeftCorner.x + halfWidth*horizontalDistance, bottomLeftCorner.y + -2*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-        Instantiate(Boss, new Vector3(bottomLeftCorner.x + halfWidth*horizontalDistance, bottomLeftCorner.y + (floors+1)*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+        GameObject bossObj = Instantiate(Boss, new Vector3(bottomLeftCorner.x + halfWidth * horizontalDistance, bottomLeftCorner.y + (floors + 1) * verticalDistance, bottomLeftCorner.z), Quaternion.identity);
+        if (bossObj != null && bossObj.TryGetComponent(out MapNode bossNode))
+        {
+            bossNode.Setup(floors, 0, "Boss");
+        }
 
         for (int floor = 0; floor < floors; floor++)
             for (int collum = 0; collum < collums; collum++)

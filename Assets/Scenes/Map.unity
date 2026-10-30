@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 88499634}
   - component: {fileID: 88499633}
   - component: {fileID: 88499632}
+  - component: {fileID: 88499635}
   m_Layer: 0
   m_Name: Boss
   m_TagString: Untagged
@@ -350,6 +351,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &88499635
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88499631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75985da2a0837ed4aaf425469af22b19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapNode
+  floor: 0
+  column: 0
+  nodeType: BasicFight
 --- !u!1 &101876352
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +934,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floor: 0
   column: 0
-  nodeType: BasicFight
+  nodeType: Chest
 --- !u!1 &170021638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,7 +1715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floor: 0
   column: 0
-  nodeType: BasicFight
+  nodeType: Event
 --- !u!1 &885796352
 GameObject:
   m_ObjectHideFlags: 0
@@ -1793,30 +1809,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 975bf005f8e0627469c82f3c2933e5d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RunManager
+  currentRace: 0
   currentFloor: -1
   mapSceneName: Map
   combatSceneName: SampleScene
   masterDeck: []
-  starterDeck:
-  - {fileID: 11400000, guid: 7b7a77945b95bb84eb8f78ca6a8bf2fe, type: 2}
-  - {fileID: 11400000, guid: 7b7a77945b95bb84eb8f78ca6a8bf2fe, type: 2}
-  - {fileID: 11400000, guid: 7b7a77945b95bb84eb8f78ca6a8bf2fe, type: 2}
-  - {fileID: 11400000, guid: 7b7a77945b95bb84eb8f78ca6a8bf2fe, type: 2}
-  - {fileID: 11400000, guid: 60520591cedc39146ae59d540b095cb7, type: 2}
-  - {fileID: 11400000, guid: 60520591cedc39146ae59d540b095cb7, type: 2}
-  - {fileID: 11400000, guid: 60520591cedc39146ae59d540b095cb7, type: 2}
-  - {fileID: 11400000, guid: 60520591cedc39146ae59d540b095cb7, type: 2}
-  - {fileID: 11400000, guid: e8470f3ab2e0bf74485db373c177021e, type: 2}
-  - {fileID: 11400000, guid: 46ccbf54e9e2c484b92607b29e43b294, type: 2}
-  humanRewardPool:
-  - {fileID: 11400000, guid: 82365ff8ec494f94b8982834f795232c, type: 2}
-  - {fileID: 11400000, guid: 9c5454af91fa503429a9e3863b50f4be, type: 2}
-  - {fileID: 11400000, guid: 0ef356ddc52332249a1600eae18692cb, type: 2}
-  - {fileID: 11400000, guid: ebec7f28822a2364784db3d2b92fd056, type: 2}
-  - {fileID: 11400000, guid: 4c6e9dfef5744fe43a62235219617d34, type: 2}
-  - {fileID: 11400000, guid: 857a4890471884b4483f8609ed4f33e5, type: 2}
-  - {fileID: 11400000, guid: 7d417f6ae93655f409bb409af8c33c4d, type: 2}
-  - {fileID: 11400000, guid: 3eb058ad050f6754581d6880fcd7679e, type: 2}
+  halflingStarterDeck: []
+  halflingRewardPool: []
+  elfStarterDeck: []
+  elfRewardPool: []
+  maiarStarterDeck: []
+  maiarRewardPool: []
   currentEncounter:
     enemyPrefabs: []
   earlyEncounters:
@@ -2194,7 +2197,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floor: 0
   column: 0
-  nodeType: BasicFight
+  nodeType: Shop
 --- !u!1 &1144654108
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,7 +2696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floor: 0
   column: 0
-  nodeType: BasicFight
+  nodeType: EliteFight
 --- !u!1 &1595598194
 GameObject:
   m_ObjectHideFlags: 0
@@ -4052,7 +4055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   floor: 0
   column: 0
-  nodeType: BasicFight
+  nodeType: Campfire
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

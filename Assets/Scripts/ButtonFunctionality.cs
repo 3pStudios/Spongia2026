@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ButtonFunctionality : MonoBehaviour
 {
-
     public List<GameObject> menuThings;
     public List<GameObject> raceSelectionThings;
 
@@ -18,6 +16,7 @@ public class ButtonFunctionality : MonoBehaviour
     {
         SceneManager.LoadScene("Settings Menu");
     }
+
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("Start Menu");
@@ -25,15 +24,29 @@ public class ButtonFunctionality : MonoBehaviour
 
     public void StartHalflingsGame()
     {
-        SceneManager.LoadScene("SampleScene");
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.StartNewRun(Race.Halflings);
+        }
+        SceneManager.LoadScene("Map");
     }
+
     public void StartElvesGame()
     {
-        Debug.Log("Start elf game");
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.StartNewRun(Race.Elves);
+        }
+        SceneManager.LoadScene("Map");
     }
+
     public void StartMaiarGame()
     {
-        Debug.Log("Start maiar game");
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.StartNewRun(Race.Maiar);
+        }
+        SceneManager.LoadScene("Map");
     }
 
     public void HideRaceSelection()
@@ -52,15 +65,16 @@ public class ButtonFunctionality : MonoBehaviour
             thing.SetActive(true);
         }
     }
+
     void CloseRaceSelection()
     {
-         foreach (GameObject thing in menuThings)
+        foreach (GameObject thing in menuThings)
         {
             thing.SetActive(true);
         }
         foreach (GameObject thing in raceSelectionThings)
         {
             thing.SetActive(false);
-        }       
+        }
     }
 }

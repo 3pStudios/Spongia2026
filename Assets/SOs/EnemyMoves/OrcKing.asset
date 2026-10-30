@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93c46778e62ef434dbaa219970e0438e, type: 3}
-  m_Name: BasicEnemy
+  m_Name: OrcKing
   m_EditorClassIdentifier: Assembly-CSharp::EnemyTurnsSO
   enemyTurns:
   - attack: 6
     shield: 0
     bleed: 0
   - attack: 0
-    shield: 6
+    shield: 12
     bleed: 0
+  - attack: 8
+    shield: 0
+    bleed: 2
   - attack: 11
     shield: 0
-    bleed: 0
-  - attack: 0
-    shield: 8
     bleed: 0

@@ -1,28 +1,62 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+public enum Race
+{
+    Halflings,
+    Elves,
+    Maiar
+}
+[System.Serializable]
+public class RaceEncounters
+{
+    public List<Encounter> earlyEncounters = new();
+    public List<Encounter> midEncounters = new();
+    public List<Encounter> lateEncounters = new();
+    public List<Encounter> eliteEncounters = new();
+    public Encounter bossEncounter;
+}
 public class RunManager : MonoBehaviour
 {
     public static RunManager Instance { get; private set; }
 
     [Header("Progress")]
+    public Race currentRace = Race.Halflings;
     public int currentFloor = -1;
     public string mapSceneName = "Map";
     public string combatSceneName = "SampleScene";
+    public bool isBossFight = false;
+    public bool isChestRoom = false; 
 
-    [Header("Deck")]
+    [Header("Persistent Stats")]
+    public int playerMaxHealth = 20;
+    public int playerCurrentHealth = 20;
+
+    [Header("Current Deck State")]
     public List<CardSO> masterDeck = new();
-    public List<CardSO> starterDeck = new();
-    public List<CardSO> humanRewardPool = new();
     private List<CardSO> currentRewardPool = new();
 
-    [Header("Encounters")]
+    [Header("Halflings Decks")]
+    public List<CardSO> halflingStarterDeck = new();
+    public List<CardSO> halflingRewardPool = new();
+
+    [Header("Elves Decks")]
+    public List<CardSO> elfStarterDeck = new();
+    public List<CardSO> elfRewardPool = new();
+
+    [Header("Maiar Decks")]
+    public List<CardSO> maiarStarterDeck = new();
+    public List<CardSO> maiarRewardPool = new();
+
+    [Header("Active Combat")]
     public Encounter currentEncounter;
-    public List<Encounter> earlyEncounters = new();
-    public List<Encounter> lateEncounters = new();
-    public List<Encounter> eliteEncounters = new();
-    public Encounter bossEncounter;
+
+    [Header("Encounters Per Race")]
+    public RaceEncounters halflingEncounters;
+    public RaceEncounters elfEncounters;
+    public RaceEncounters maiarEncounters;
+
 
     private void Awake()
     {
@@ -34,14 +68,42 @@ public class RunManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        ResetRun();
+        if (masterDeck.Count == 0)
+        {
+            StartNewRun(currentRace);
+        }
     }
 
-    public void ResetRun()
+    public void StartNewRun(Race race)
     {
+        currentRace = race;
         currentFloor = -1;
-        masterDeck = new List<CardSO>(starterDeck);
-        currentRewardPool = new List<CardSO>(humanRewardPool);
+        isBossFight = false;
+        playerMaxHealth = 20;
+        playerCurrentHealth = playerMaxHealth;
+        MapGen.ResetMapData();
+
+        List<CardSO> selectedStarter = race switch
+        {
+            Race.Elves => elfStarterDeck,
+            Race.Maiar => maiarStarterDeck,
+            _ => halflingStarterDeck
+        };
+
+        List<CardSO> selectedPool = race switch
+        {
+            Race.Elves => elfRewardPool,
+            Race.Maiar => maiarRewardPool,
+            _ => halflingRewardPool
+        };
+
+        masterDeck = new List<CardSO>(selectedStarter);
+        currentRewardPool = new List<CardSO>(selectedPool);
+    }
+
+    public void HealPlayer(int amount)
+    {
+        playerCurrentHealth = Mathf.Clamp(playerCurrentHealth + amount, 0, playerMaxHealth);
     }
 
     public void AddCard(CardSO card)
@@ -69,23 +131,51 @@ public class RunManager : MonoBehaviour
         return rewards;
     }
 
-    public void StartCombatFromNode(string nodeType, int floor)
+    public void SelectNode(string nodeType, int floor)
     {
         currentFloor = floor;
+        isBossFight = false;
+        isChestRoom = false;
+
+        if (nodeType == "Campfire")
+        {
+            HealPlayer(8);
+            SceneManager.LoadScene(mapSceneName);
+            return;
+        }
+
+        if (nodeType == "Chest")
+        {
+            isChestRoom = true;
+            currentEncounter = null;
+            SceneManager.LoadScene(combatSceneName);
+            return;
+        }
+
+        RaceEncounters activePool = currentRace switch
+        {
+            Race.Elves => elfEncounters,
+            Race.Maiar => maiarEncounters,
+            _ => halflingEncounters
+        };
 
         if (nodeType == "Boss")
         {
-            currentEncounter = bossEncounter;
+            isBossFight = true;
+            currentEncounter = activePool.bossEncounter;
         }
         else if (nodeType == "EliteFight")
         {
-            currentEncounter = GetRandomEncounter(eliteEncounters);
+            currentEncounter = GetRandomEncounter(activePool.eliteEncounters);
         }
         else
         {
-            currentEncounter = floor < 3 
-                ? GetRandomEncounter(earlyEncounters) 
-                : GetRandomEncounter(lateEncounters);
+            if (floor < 4)
+                currentEncounter = GetRandomEncounter(activePool.earlyEncounters);
+            else if (floor < 8)
+                currentEncounter = GetRandomEncounter(activePool.midEncounters);
+            else
+                currentEncounter = GetRandomEncounter(activePool.lateEncounters);
         }
 
         SceneManager.LoadScene(combatSceneName);
