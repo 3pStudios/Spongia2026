@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -10,35 +10,29 @@ public class Player : MonoBehaviour
     public int maxHealth = 20;
     public int currentHealth = 20;
 
-
-
-
     [Header("Shield")]
     public int currentShield = 0;
 
-
-
+    [Header("Bleed")]
+    public int currentBleed = 0;
 
     [Header("Mana")]
     public int maxMana = 3;
     public int currentMana = 3;
 
-
-
+    [Header("Passives")]
+    public bool hasBloodletting = false;
+    public bool hasThornyShield = false;
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private Image healthBarFill;
     [SerializeField] private TextMeshProUGUI manaText;
-
-
-
+    [SerializeField] private TextMeshProUGUI bleedText;
 
     [Header("Attack FX")]
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform shootPoint;
-
-
 
     private void Start()
     {
@@ -47,15 +41,30 @@ public class Player : MonoBehaviour
         UpdateUI();
     }
 
-    public IEnumerator ApplyCardRoutine(CardSO cardData)
+    public void ApplyBleed(int amount)
     {
-        switch (cardData.cardType)
+        currentBleed += amount;
+        UpdateUI();
+    }
+
+    public IEnumerator TickBleedRoutine()
+    {
+        if (currentBleed <= 0) yield break;
+
+        currentHealth = Mathf.Clamp(currentHealth - currentBleed, 0, maxHealth);
+        CameraShake.Instance.Shake(0.08f, 0.06f);
+
+        currentBleed--;
+        UpdateUI();
+
+        yield return new WaitForSeconds(0.25f);
+
+        if (currentHealth <= 0)
         {
-            case CardType.Shield:
-                yield return StartCoroutine(ApplyShieldRoutine(cardData.shieldValue));
-                break;
+            GameManager.Instance.PlayerDied();
         }
     }
+
     public IEnumerator ApplyShieldRoutine(int amount)
     {
         yield return new WaitForSeconds(0.2f);
@@ -85,6 +94,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void TakeDirectDamage(int damage)
+    {
+        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        UpdateUI();
+        CameraShake.Instance.Shake(0.1f, 0.08f);
+
+        if (currentHealth <= 0)
+        {
+            GameManager.Instance.PlayerDied();
+        }
+    }
+
     public bool HasEnoughMana(int amount) => currentMana >= amount;
 
     public void SpendMana(int amount)
@@ -105,12 +126,62 @@ public class Player : MonoBehaviour
         UpdateUI();
     }
 
+    public void ResetTurnPassives()
+    {
+        hasThornyShield = false;
+    }
+
     public void UpdateUI()
     {
         healthText.text = $"{currentHealth}/{maxHealth}";
         healthBarFill.fillAmount = (float)currentHealth / maxHealth;
         manaText.text = $"{currentMana}/{maxMana}";
+
+        if (bleedText != null)
+        {
+            bleedText.gameObject.SetActive(currentBleed > 0);
+            bleedText.text = $"🩸{currentBleed}";
+        }
     }
+
+    public IEnumerator ExecuteCardEffectsRoutine(CardSO card, Enemy singleTarget, List<Enemy> allEnemies)
+    {
+        if (card.selfDamage > 0)
+        {
+            TakeDirectDamage(card.selfDamage);
+            if (currentHealth <= 0) yield break;
+        }
+
+        if (card.shield > 0)
+        {
+            yield return StartCoroutine(ApplyShieldRoutine(card.shield));
+        }
+
+        if (card.drawCards > 0)
+        {
+            yield return StartCoroutine(GameManager.Instance.DrawCardsRoutine(card.drawCards));
+        }
+
+        if (card.bloodletting) hasBloodletting = true;
+        if (card.thornyShield) hasThornyShield = true;
+
+        if (card.target == CardTarget.SingleEnemy && singleTarget != null)
+        {
+            if (card.doubleBleed) singleTarget.DoubleBleed();
+            if (card.damage > 0 || card.bleed > 0)
+            {
+                yield return StartCoroutine(AttackEnemyRoutine(singleTarget, card));
+            }
+        }
+        else if (card.target == CardTarget.AllEnemies)
+        {
+            if (card.damage > 0 || card.bleed > 0)
+            {
+                yield return StartCoroutine(AttackAllEnemiesRoutine(allEnemies, card));
+            }
+        }
+    }
+
     public IEnumerator AttackEnemyRoutine(Enemy target, CardSO card)
     {
         Vector3 originalPos = transform.position;
@@ -123,7 +194,8 @@ public class Player : MonoBehaviour
             transform.position = lungePos;
             yield return new WaitForSeconds(0.08f);
 
-            yield return StartCoroutine(FireArrowRoutine(target, card));
+            int bleedToApply = (i == 0) ? card.bleed : 0;
+            yield return StartCoroutine(FireArrowRoutine(target, card.damage, bleedToApply));
 
             transform.position = originalPos;
 
@@ -153,7 +225,8 @@ public class Player : MonoBehaviour
                 Enemy target = targets[i];
                 if (target == null || target.currentHealth <= 0) continue;
 
-                lastArrowRoutine = StartCoroutine(FireArrowRoutine(target, card));
+                int bleedToApply = (hit == 0) ? card.bleed : 0;
+                lastArrowRoutine = StartCoroutine(FireArrowRoutine(target, card.damage, bleedToApply));
 
                 if (i < targets.Count - 1)
                 {
@@ -176,7 +249,7 @@ public class Player : MonoBehaviour
         transform.position = originalPos;
     }
 
-    private IEnumerator FireArrowRoutine(Enemy target, CardSO card)
+    private IEnumerator FireArrowRoutine(Enemy target, int damage, int bleed = 0)
     {
         GameObject arrowObj = Instantiate(arrowPrefab, shootPoint.position, Quaternion.identity);
         Projectile projectile = arrowObj.GetComponent<Projectile>();
@@ -185,15 +258,8 @@ public class Player : MonoBehaviour
 
         if (target != null && target.currentHealth > 0)
         {
-            if (card.damage > 0)
-            {
-                target.TakeDamage(card.damage);
-            }
-
-            if (card.bleedAmount > 0)
-            {
-                target.ApplyBleed(card.bleedAmount);
-            }
+            if (damage > 0) target.TakeDamage(damage);
+            if (bleed > 0) target.ApplyBleed(bleed);
         }
     }
 }

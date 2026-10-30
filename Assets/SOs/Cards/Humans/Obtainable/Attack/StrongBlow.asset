@@ -15,11 +15,15 @@ MonoBehaviour:
   cardName: Strong Blow
   cardCost: 3
   cardDescription: Deal 20 damage to one target
-  cardType: 0
-  applyType: 1
-  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
+  target: 0
+  cardImage: {fileID: 9084395418534292324, guid: ceeb3fa2407142b438bc49e650325baa,
     type: 3}
   damage: 20
-  attackType: 0
   hitCount: 1
-  shieldValue: 0
+  shield: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0

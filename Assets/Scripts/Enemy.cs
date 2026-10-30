@@ -10,31 +10,25 @@ public class Enemy : MonoBehaviour
     public int currentHealth = 20;
     public int currentShield = 0;
     public int currentAttack = 0;
+    public int currentBleed = 0;
 
+    public bool isFlying = false;
 
-
+    private int nextBleedToInflict = 0;
 
     [Header("Turns Data")]
     public EnemyTurnsSO enemyTurnsSO;
-    private EnemyTurn currentTurn;
-
-
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI shieldIndicationText;
     [SerializeField] private TextMeshProUGUI attackIndicationText;
+    [SerializeField] private TextMeshProUGUI bleedText;
     [SerializeField] private Image healthBarFill;
-
 
     [Header("Attack FX")]
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform shootPoint;
-
-
-    [Header("Debuffs")]
-    public int currentBleed = 0;
-    [SerializeField] private TextMeshProUGUI bleedText;
 
     private void Start()
     {
@@ -48,24 +42,9 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator ExecuteTurnRoutine()
     {
-        if (currentBleed > 0)
+        if (currentAttack > 0 || nextBleedToInflict > 0)
         {
-            currentBleed--;
-            UpdateUI();
-
-            if (currentBleed > 0)
-            {
-                yield return new WaitForSeconds(0.15f);
-                TakeDirectDamage(currentBleed);
-                yield return new WaitForSeconds(0.2f);
-            }
-
-            if (currentHealth <= 0) yield break;
-        }
-
-        if (currentAttack > 0)
-        {
-            yield return StartCoroutine(GameManager.Instance.EnemyAttackSequence(this, currentAttack));
+            yield return StartCoroutine(AttackPlayerRoutine(GameManager.Instance.player, currentAttack, nextBleedToInflict));
         }
     }
 
@@ -79,17 +58,19 @@ public class Enemy : MonoBehaviour
     {
         EnemyTurn turn = enemyTurnsSO.enemyTurns[turnIndex];
 
-        if (turn.turnType == CardType.Attack)
+        currentAttack = turn.attack;
+        nextBleedToInflict = turn.bleed;
+
+        if (turn.shield > 0)
         {
-            currentAttack = turn.value;
+            yield return StartCoroutine(ApplyShieldRoutine(turn.shield));
+        }
+        else
+        {
             currentShield = 0;
-            UpdateUI();
         }
-        else if (turn.turnType == CardType.Shield)
-        {
-            currentAttack = 0;
-            yield return StartCoroutine(ApplyShieldRoutine(turn.value));
-        }
+
+        UpdateUI();
     }
 
     public IEnumerator ApplyShieldRoutine(int amount)
@@ -106,7 +87,37 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
     }
 
-    public IEnumerator AttackPlayerRoutine(Player target, int attackDamage)
+    public void ApplyBleed(int amount)
+    {
+        currentBleed += amount;
+        UpdateUI();
+    }
+
+    public void DoubleBleed()
+    {
+        currentBleed *= 2;
+        UpdateUI();
+    }
+
+    public IEnumerator TickBleedRoutine()
+    {
+        if (currentBleed <= 0) yield break;
+
+        currentHealth = Mathf.Clamp(currentHealth - currentBleed, 0, maxHealth);
+        CameraShake.Instance.Shake(0.08f, 0.06f);
+
+        currentBleed--;
+        UpdateUI();
+
+        yield return new WaitForSeconds(0.25f);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    public IEnumerator AttackPlayerRoutine(Player target, int attackDamage, int bleedDamage = 0)
     {
         Vector3 originalPos = transform.position;
         Vector3 lungePos = originalPos - new Vector3(0.4f, 0, 0);
@@ -119,10 +130,16 @@ public class Enemy : MonoBehaviour
 
         yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 30f));
 
-        target.TakeDamage(attackDamage);
+        if (attackDamage > 0) target.TakeDamage(attackDamage);
+        if (bleedDamage > 0) target.ApplyBleed(bleedDamage);
+
+        if (target.hasThornyShield)
+        {
+            TakeDamage(2);
+            ApplyBleed(2);
+        }
 
         transform.position = originalPos;
-        
     }
 
     public void TakeDamage(int damage)
@@ -157,27 +174,7 @@ public class Enemy : MonoBehaviour
         if (bleedText != null)
         {
             bleedText.gameObject.SetActive(currentBleed > 0);
-            bleedText.text = currentBleed > 0 ? $"{currentBleed}" : "";
-        }
-    }
-
-
-    public void ApplyBleed(int amount)
-    {
-        if (amount <= 0) return;
-
-        currentBleed += amount;
-        UpdateUI();
-    }
-    public void TakeDirectDamage(int damage)
-    {
-        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
-        UpdateUI();
-        CameraShake.Instance.Shake(0.08f, 0.06f);
-
-        if (currentHealth <= 0)
-        {
-            Die();
+            bleedText.text = $"🩸{currentBleed}";
         }
     }
 }

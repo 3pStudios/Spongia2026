@@ -9,6 +9,7 @@ public class EnemyTurnsSO : ScriptableObject
 [System.Serializable]
 public class EnemyTurn
 {
-    public int value;
-    public CardType turnType;
+    public int attack;
+    public int shield;
+    public int bleed;
 }

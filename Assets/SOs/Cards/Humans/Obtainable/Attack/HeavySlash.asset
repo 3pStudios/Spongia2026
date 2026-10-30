@@ -15,11 +15,15 @@ MonoBehaviour:
   cardName: Heavy Slash
   cardCost: 2
   cardDescription: Deal 7 damage to ALL targets
-  cardType: 0
-  applyType: 1
-  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
+  target: 1
+  cardImage: {fileID: 820572107988472682, guid: 0f6e5d40ed3f0c94581ac83a0b331aa9,
     type: 3}
   damage: 7
-  attackType: 1
   hitCount: 1
-  shieldValue: 0
+  shield: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0

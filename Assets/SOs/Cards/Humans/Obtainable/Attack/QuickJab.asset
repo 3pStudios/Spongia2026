@@ -15,11 +15,15 @@ MonoBehaviour:
   cardName: Quick Jab
   cardCost: 0
   cardDescription: Deal 3 damage to one target
-  cardType: 0
-  applyType: 1
-  cardImage: {fileID: 1099526183386305136, guid: a0d170366d186404d8c09b0f8bbea5ee,
+  target: 0
+  cardImage: {fileID: -1100689062298638331, guid: b4a707398f75d604ca6bb6fe4177330c,
     type: 3}
   damage: 3
-  attackType: 0
   hitCount: 1
-  shieldValue: 0
+  shield: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0

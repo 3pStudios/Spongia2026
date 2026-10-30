@@ -13,35 +13,28 @@ public class GameManager : MonoBehaviour
     [Header("Turn")]
     public int gameTurn = 0;
 
-
-
-
     [Header("Decks")]
     public List<CardSO> masterDeck = new();
     public List<CardSO> drawDeck = new();
     public List<CardSO> handDeck = new();
     public List<CardSO> discardDeck = new();
 
-
-
-
     [Header("Entities")]
     public Player player;
     public List<Enemy> enemiesAlive = new();
 
+    [Header("Spawning")]
+    [SerializeField] private Transform[] groundSpawnPoints;
+    [SerializeField] private Transform[] flyingSpawnPoints;
+    public Encounter currentEncounter;
 
-
-
-    [Header("UI & Spawning")]
+    [Header("UI")]
     [SerializeField] private GameObject cardPlace;
     [SerializeField] private GameObject cardPrefab;
-
-
-
+    [SerializeField] private RewardUI rewardUI;
 
     private void Awake()
     {
-        //Singleton
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -52,24 +45,69 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (RunManager.Instance != null && RunManager.Instance.masterDeck.Count > 0)
+        {
+            masterDeck = new List<CardSO>(RunManager.Instance.masterDeck);
+        }
+
         gameTurn = 0;
         drawDeck = new List<CardSO>(masterDeck);
         drawDeck.Shuffle();
 
-        foreach (var enemy in enemiesAlive)
-        {
-            enemy.SetupEnemy();
-        }
+        Encounter encounterToSpawn = (RunManager.Instance != null && RunManager.Instance.currentEncounter != null)
+            ? RunManager.Instance.currentEncounter
+            : currentEncounter;
+
+        SpawnEncounter(encounterToSpawn);
 
         StartCoroutine(StartGameRoutine());
     }
-    //Reset game state
+
+    public void SpawnEncounter(Encounter encounter)
+    {
+        foreach (var enemy in enemiesAlive)
+        {
+            if (enemy != null)
+            {
+                Destroy(enemy.gameObject);
+            }
+        }
+        enemiesAlive.Clear();
+
+        if (encounter == null || encounter.enemyPrefabs == null) return;
+
+        int groundCount = 0;
+        int flyingCount = 0;
+
+        foreach (GameObject prefab in encounter.enemyPrefabs)
+        {
+            if (prefab == null) continue;
+
+            Enemy enemyComp = prefab.GetComponent<Enemy>();
+            bool isFlying = enemyComp != null && enemyComp.isFlying;
+
+            Transform[] spawnArray = isFlying ? flyingSpawnPoints : groundSpawnPoints;
+            int count = isFlying ? flyingCount++ : groundCount++;
+
+            if (spawnArray == null || count >= spawnArray.Length) continue;
+
+            Transform spawnPoint = spawnArray[count];
+            if (spawnPoint == null) continue;
+
+            GameObject enemyObj = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+            Enemy spawnedEnemy = enemyObj.GetComponent<Enemy>();
+            enemiesAlive.Add(spawnedEnemy);
+            spawnedEnemy.SetupEnemy();
+        }
+    }
+
+
     private IEnumerator StartGameRoutine()
     {
         isProcessingTurn = true;
         player.ResetMana();
         player.ResetShield();
-        yield return StartCoroutine(DrawCardsRoutine(5));
+        yield return StartCoroutine(TurnStartDrawRoutine(5));
         isProcessingTurn = false;
     }
 
@@ -78,48 +116,19 @@ public class GameManager : MonoBehaviour
         return !isProcessingTurn && player.HasEnoughMana(card.cardCost);
     }
 
-    public void PlayCardPlayer(CardSO card)
+    public void PlayCard(CardSO card, Enemy target = null)
     {
         if (!CanPlayCard(card)) return;
 
         player.SpendMana(card.cardCost);
         DiscardCard(card);
-        StartCoroutine(PlayerPlayCardSequence(card));
+        StartCoroutine(ExecuteCardSequence(card, target));
     }
-    private IEnumerator PlayerPlayCardSequence(CardSO card)
+
+    private IEnumerator ExecuteCardSequence(CardSO card, Enemy target)
     {
         isProcessingTurn = true;
-        yield return StartCoroutine(player.ApplyCardRoutine(card));
-        isProcessingTurn = false;
-    }
-
-    public void PlayCardEnemy(CardSO card, Enemy enemy)
-    {
-        if (!CanPlayCard(card)) return;
-
-        player.SpendMana(card.cardCost);
-        DiscardCard(card);
-        StartCoroutine(PlayerAttackSequence(card, enemy));
-    }
-
-    private IEnumerator PlayerAttackSequence(CardSO card, Enemy enemy)
-    {
-        isProcessingTurn = true;
-        yield return StartCoroutine(player.AttackEnemyRoutine(enemy, card));
-        isProcessingTurn = false;
-    }
-    public void PlayCardAllEnemies(CardSO card)
-    {
-        if (!CanPlayCard(card)) return;
-
-        player.SpendMana(card.cardCost);
-        DiscardCard(card);
-        StartCoroutine(PlayerAttackAllSequence(card));
-    }
-    private IEnumerator PlayerAttackAllSequence(CardSO card)
-    {
-        isProcessingTurn = true;
-        yield return StartCoroutine(player.AttackAllEnemiesRoutine(new List<Enemy>(enemiesAlive), card));
+        yield return StartCoroutine(player.ExecuteCardEffectsRoutine(card, target, new List<Enemy>(enemiesAlive)));
         isProcessingTurn = false;
     }
 
@@ -127,8 +136,6 @@ public class GameManager : MonoBehaviour
     {
         yield return StartCoroutine(enemy.AttackPlayerRoutine(player, attackDamage));
     }
-
-
 
     public void EndTurn()
     {
@@ -142,6 +149,16 @@ public class GameManager : MonoBehaviour
 
         foreach (var enemy in new List<Enemy>(enemiesAlive))
         {
+            if (enemy.currentBleed > 0)
+            {
+                yield return StartCoroutine(enemy.TickBleedRoutine());
+            }
+        }
+
+        if (enemiesAlive.Count == 0) yield break;
+
+        foreach (var enemy in new List<Enemy>(enemiesAlive))
+        {
             yield return StartCoroutine(enemy.ExecuteTurnRoutine());
         }
 
@@ -150,17 +167,31 @@ public class GameManager : MonoBehaviour
             yield return StartCoroutine(enemy.SetupNextTurnRoutine(gameTurn));
         }
 
+        if (player.currentBleed > 0)
+        {
+            yield return StartCoroutine(player.TickBleedRoutine());
+        }
+
         gameTurn++;
 
         player.ResetMana();
         player.ResetShield();
+        player.ResetTurnPassives();
 
-        yield return StartCoroutine(DrawCardsRoutine(5));
+        if (player.hasBloodletting)
+        {
+            foreach (var enemy in enemiesAlive)
+            {
+                enemy.ApplyBleed(2);
+            }
+        }
+
+        yield return StartCoroutine(TurnStartDrawRoutine(5));
 
         isProcessingTurn = false;
     }
 
-    public IEnumerator DrawCardsRoutine(int numberOfCards)
+    public IEnumerator TurnStartDrawRoutine(int numberOfCards)
     {
         discardDeck.AddRange(handDeck);
         handDeck.Clear();
@@ -171,7 +202,11 @@ public class GameManager : MonoBehaviour
         }
 
         yield return null;
+        yield return StartCoroutine(DrawCardsRoutine(numberOfCards));
+    }
 
+    public IEnumerator DrawCardsRoutine(int numberOfCards)
+    {
         for (int i = 0; i < numberOfCards; i++)
         {
             CardSO drawnCard = DrawCard();
@@ -185,8 +220,7 @@ public class GameManager : MonoBehaviour
             Image cardImg = newCard.GetComponent<Image>();
             cardImg.sprite = drawnCard.cardImage;
 
-
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.12f);
         }
     }
 
@@ -216,8 +250,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-
     public void CheckBattleOver()
     {
         if (enemiesAlive.Count == 0)
@@ -231,11 +263,20 @@ public class GameManager : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(GameOverRoutine());
     }
+
     private IEnumerator VictoryRoutine()
     {
         isProcessingTurn = true;
-        yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("Start Menu");
+        yield return new WaitForSeconds(0.8f);
+
+        if (rewardUI != null)
+        {
+            rewardUI.ShowRewards();
+        }
+        else
+        {
+            SceneManager.LoadScene("Start Menu");
+        }
     }
 
     private IEnumerator GameOverRoutine()
@@ -244,10 +285,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("Start Menu");
     }
-
-
-
-
 }
 
 public static class IListExtensions

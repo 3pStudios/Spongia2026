@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df4046e6d52fc4a892904e4dd28dae, type: 3}
+  m_Name: Scratch
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardName: Scratch
+  cardCost: 1
+  cardDescription: Deal 3 damage and apply 2 bleed to one target
+  target: 0
+  cardImage: {fileID: -8540397549773956295, guid: 5155ca5bc19d8c6489cbc82f86f69a1e,
+    type: 3}
+  damage: 3
+  hitCount: 1
+  shield: 0
+  bleed: 2
+  doubleBleed: 0
+  drawCards: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0

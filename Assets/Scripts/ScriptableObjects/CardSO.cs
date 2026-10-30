@@ -1,21 +1,10 @@
 using UnityEngine;
 
-public enum CardType
-{
-    Attack,
-    Shield
-}
-
-public enum AttackType
+public enum CardTarget
 {
     SingleEnemy,
-    MultiEnemy
-}
-
-public enum ApplyType
-{
-    Player,
-    Enemy
+    AllEnemies,
+    Self
 }
 
 [CreateAssetMenu(fileName = "NewCard", menuName = "Cards/Card")]
@@ -25,26 +14,25 @@ public class CardSO : ScriptableObject
     public string cardName;
     public int cardCost = 1;
     [TextArea(2, 4)] public string cardDescription;
-    public CardType cardType;
-    public ApplyType applyType;
+    public CardTarget target = CardTarget.SingleEnemy;
     public Sprite cardImage;
 
-
-
-
-
-
-    [Header("Attack Properties")]
+    [Header("Direct Damage")]
     public int damage;
-    public AttackType attackType;
     public int hitCount = 1;
 
+    [Header("Shield")]
+    public int shield;
 
+    [Header("Bleed")]
+    public int bleed;
+    public bool doubleBleed;
 
-    [Header("Shield Properties")]
-    public int shieldValue;
+    [Header("Utility")]
+    public int drawCards;
+    public int selfDamage;
 
-
-    [Header("Status Properties")]
-    public int bleedAmount = 0;
+    [Header("Powers & Passives")]
+    public bool bloodletting;
+    public bool thornyShield;
 }
