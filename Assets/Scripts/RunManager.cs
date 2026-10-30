@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public enum Race
@@ -57,6 +56,9 @@ public class RunManager : MonoBehaviour
     public RaceEncounters elfEncounters;
     public RaceEncounters maiarEncounters;
 
+    [Header("Economy")]
+    public int gold = 80;
+
 
     private void Awake()
     {
@@ -79,6 +81,7 @@ public class RunManager : MonoBehaviour
         currentRace = race;
         currentFloor = -1;
         isBossFight = false;
+        gold = 80;
         playerMaxHealth = 20;
         playerCurrentHealth = playerMaxHealth;
         MapGen.ResetMapData();
@@ -99,6 +102,28 @@ public class RunManager : MonoBehaviour
 
         masterDeck = new List<CardSO>(selectedStarter);
         currentRewardPool = new List<CardSO>(selectedPool);
+    }
+    public void AddGold(int amount) => gold += amount;
+
+    public bool SpendGold(int amount)
+    {
+        if (gold >= amount)
+        {
+            gold -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void RemoveCard(CardSO card)
+    {
+        masterDeck.Remove(card);
+    }
+
+    public void AddMaxHealth(int amount)
+    {
+        playerMaxHealth += amount;
+        playerCurrentHealth += amount;
     }
 
     public void HealPlayer(int amount)
@@ -137,11 +162,23 @@ public class RunManager : MonoBehaviour
         isBossFight = false;
         isChestRoom = false;
 
-        if (nodeType == "Campfire")
+        if (MapUIManager.Instance != null)
         {
-            HealPlayer(8);
-            SceneManager.LoadScene(mapSceneName);
-            return;
+            if (nodeType == "Campfire")
+            {
+                MapUIManager.Instance.OpenCampfire();
+                return;
+            }
+            if (nodeType == "Shop")
+            {
+                MapUIManager.Instance.OpenShop();
+                return;
+            }
+            if (nodeType == "Event")
+            {
+                MapUIManager.Instance.OpenEvent();
+                return;
+            }
         }
 
         if (nodeType == "Chest")
@@ -163,12 +200,14 @@ public class RunManager : MonoBehaviour
         {
             isBossFight = true;
             currentEncounter = activePool.bossEncounter;
+            SceneManager.LoadScene(combatSceneName);
         }
         else if (nodeType == "EliteFight")
         {
             currentEncounter = GetRandomEncounter(activePool.eliteEncounters);
+            SceneManager.LoadScene(combatSceneName);
         }
-        else
+        else if (nodeType == "BasicFight")
         {
             if (floor < 4)
                 currentEncounter = GetRandomEncounter(activePool.earlyEncounters);
@@ -176,9 +215,13 @@ public class RunManager : MonoBehaviour
                 currentEncounter = GetRandomEncounter(activePool.midEncounters);
             else
                 currentEncounter = GetRandomEncounter(activePool.lateEncounters);
-        }
 
-        SceneManager.LoadScene(combatSceneName);
+            SceneManager.LoadScene(combatSceneName);
+        }
+        else
+        {
+            Debug.Log("No combat.");
+        }
     }
 
     private Encounter GetRandomEncounter(List<Encounter> pool)

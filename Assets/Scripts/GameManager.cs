@@ -279,10 +279,14 @@ public class GameManager : MonoBehaviour
         isProcessingTurn = true;
         yield return new WaitForSeconds(0.8f);
 
-        // If the Boss was defeated, player won the game!
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.AddGold(Random.Range(15, 26));
+        }
+
         if (RunManager.Instance != null && RunManager.Instance.isBossFight)
         {
-            SceneManager.LoadScene("Start Menu"); // Or a Victory Scene
+            SceneManager.LoadScene("Start Menu");
             yield break;
         }
 
@@ -295,6 +299,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("Start Menu");
         }
     }
+
 
     private IEnumerator GameOverRoutine()
     {

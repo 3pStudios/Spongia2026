@@ -64,6 +64,7 @@ public class ButtonFunctionality : MonoBehaviour
         {
             thing.SetActive(true);
         }
+        
     }
 
     void CloseRaceSelection()

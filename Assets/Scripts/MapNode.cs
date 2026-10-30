@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MapNode : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
         if (RunManager.Instance == null) return;
 
         if (floor == RunManager.Instance.currentFloor + 1)

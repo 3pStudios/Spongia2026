@@ -586,6 +586,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 857a4890471884b4483f8609ed4f33e5, type: 2}
   - {fileID: 11400000, guid: 7d417f6ae93655f409bb409af8c33c4d, type: 2}
   - {fileID: 11400000, guid: 3eb058ad050f6754581d6880fcd7679e, type: 2}
+  - {fileID: 11400000, guid: be53cf94cf1919347b9f07230ecfb87a, type: 2}
+  - {fileID: 11400000, guid: cc56f833a78c63e429c7f23be6715d96, type: 2}
+  - {fileID: 11400000, guid: 8145fe29b23ec7f48b23687caf4bf952, type: 2}
+  - {fileID: 11400000, guid: 686d828269f772b44af14f41f026d45f, type: 2}
+  - {fileID: 11400000, guid: 4b77f74615a790e469914e580deb216a, type: 2}
   elfStarterDeck: []
   elfRewardPool: []
   maiarStarterDeck: []
