@@ -561,6 +561,10 @@ MonoBehaviour:
   currentFloor: -1
   mapSceneName: Map
   combatSceneName: SampleScene
+  isBossFight: 0
+  isChestRoom: 0
+  playerMaxHealth: 20
+  playerCurrentHealth: 20
   masterDeck: []
   halflingStarterDeck:
   - {fileID: 11400000, guid: 7b7a77945b95bb84eb8f78ca6a8bf2fe, type: 2}
@@ -588,16 +592,43 @@ MonoBehaviour:
   maiarRewardPool: []
   currentEncounter:
     enemyPrefabs: []
-  earlyEncounters:
-  - enemyPrefabs:
-    - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
-    - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
-  - enemyPrefabs:
-    - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
-  lateEncounters: []
-  eliteEncounters: []
-  bossEncounter:
-    enemyPrefabs: []
+  halflingEncounters:
+    earlyEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+    midEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+    lateEncounters: []
+    eliteEncounters: []
+    bossEncounter:
+      enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 170370c75658a714d87e71847ba00188, type: 3}
+  elfEncounters:
+    earlyEncounters: []
+    midEncounters: []
+    lateEncounters: []
+    eliteEncounters: []
+    bossEncounter:
+      enemyPrefabs: []
+  maiarEncounters:
+    earlyEncounters: []
+    midEncounters: []
+    lateEncounters: []
+    eliteEncounters: []
+    bossEncounter:
+      enemyPrefabs: []
 --- !u!4 &209556489
 Transform:
   m_ObjectHideFlags: 0
