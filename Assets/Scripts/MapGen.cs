@@ -16,46 +16,46 @@ public class MapGen : MonoBehaviour
     public GameObject LeftPath;
     public GameObject StraightPath;
 
-public Vector3 bottomLeftCorner;
-public int floors;
-public int collums;
-public int horizontalDistance;
-public int verticalDistance;
+    public Vector3 bottomLeftCorner;
+    public int floors;
+    public int collums;
+    public int horizontalDistance;
+    public int verticalDistance;
 
-public GameObject[] StartPaths;
-public GameObject[] BossPaths;
+    public GameObject[] StartPaths;
+    public GameObject[] BossPaths;
 
-//Node types
-public GameObject BasicFight;
-public int chanceBasicFight;
-public GameObject Shop;
-public int chanceShop;
-public GameObject Event;
-public int chanceEvent;
-public GameObject Campfire;
-public int chanceCampfire;
-public GameObject EliteFight;
-public int chanceEliteFight;
-public GameObject Chest;
-public int chanceChest;
+    //Node types
+    public GameObject BasicFight;
+    public int chanceBasicFight;
+    public GameObject Shop;
+    public int chanceShop;
+    public GameObject Event;
+    public int chanceEvent;
+    public GameObject Campfire;
+    public int chanceCampfire;
+    public GameObject EliteFight;
+    public int chanceEliteFight;
+    public GameObject Chest;
+    public int chanceChest;
 
-public Dictionary<string, int> nodeWeights;
-void Awake()
-    {
-        nodeWeights = new Dictionary<string, int> {
-            {"BasicFight", chanceBasicFight}, 
-            {"Shop", chanceShop}, 
-            {"Event", chanceEvent}, 
-            {"Campfire", chanceCampfire},
-            {"EliteFight", chanceEliteFight},
-            {"Chest", chanceChest}
-        };
+    public Dictionary<string, int> nodeWeights;
+    void Awake()
+        {
+            nodeWeights = new Dictionary<string, int> {
+                {"BasicFight", chanceBasicFight}, 
+                {"Shop", chanceShop}, 
+                {"Event", chanceEvent}, 
+                {"Campfire", chanceCampfire},
+                {"EliteFight", chanceEliteFight},
+                {"Chest", chanceChest}
+            };
 
-        TestGen();
-    }
+            TestGen();
+        }
 
-public GameObject Start;
-public GameObject Boss;
+    public GameObject Start;
+    public GameObject Boss;
 
 
     class Node
