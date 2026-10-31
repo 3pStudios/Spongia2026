@@ -4,6 +4,7 @@ public enum CardTarget
 {
     SingleEnemy,
     AllEnemies,
+    RandomEnemy,
     Self
 }
 
@@ -24,15 +25,21 @@ public class CardSO : ScriptableObject
     [Header("Shield")]
     public int shield;
 
+    [Header("Healing & Regen")]
+    public int heal;
+    public int medic;
+
     [Header("Bleed")]
     public int bleed;
     public bool doubleBleed;
 
     [Header("Utility")]
     public int drawCards;
+    public int gainMana;
     public int selfDamage;
 
     [Header("Powers & Passives")]
     public bool bloodletting;
     public bool thornyShield;
+    public bool stun;
 }

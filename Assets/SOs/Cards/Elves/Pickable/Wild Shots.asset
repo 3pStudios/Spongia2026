@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df4046e6d52fc4a892904e4dd28dae, type: 3}
+  m_Name: Wild Shots
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardName: Wild Shots
+  cardCost: 2
+  cardDescription: Deal 7 damage to 2 random targets.
+  target: 2
+  cardImage: {fileID: -4531508515475871354, guid: e291b45e90a5418489fefc1139d8180a,
+    type: 3}
+  damage: 7
+  hitCount: 2
+  shield: 0
+  heal: 0
+  medic: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  gainMana: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0
+  stun: 0

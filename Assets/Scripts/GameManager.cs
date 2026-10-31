@@ -188,6 +188,11 @@ public class GameManager : MonoBehaviour
         player.ResetShield();
         player.ResetTurnPassives();
 
+        if (player.currentMedic > 0)
+        {
+            yield return StartCoroutine(player.TickMedicRoutine());
+        }
+        
         if (player.hasBloodletting)
         {
             foreach (var enemy in enemiesAlive)

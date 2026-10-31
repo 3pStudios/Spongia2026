@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df4046e6d52fc4a892904e4dd28dae, type: 3}
+  m_Name: Multi Aim
+  m_EditorClassIdentifier: Assembly-CSharp::CardSO
+  cardName: Multi Aim
+  cardCost: 2
+  cardDescription: Deal 6 damage to all targets. Gain 4 shield.
+  target: 1
+  cardImage: {fileID: -6121544603036212355, guid: b705d4b8a3ae8ee4eb033634cda3f358,
+    type: 3}
+  damage: 6
+  hitCount: 1
+  shield: 4
+  heal: 0
+  medic: 0
+  bleed: 0
+  doubleBleed: 0
+  drawCards: 0
+  gainMana: 0
+  selfDamage: 0
+  bloodletting: 0
+  thornyShield: 0
+  stun: 0

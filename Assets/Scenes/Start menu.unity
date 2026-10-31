@@ -591,8 +591,40 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8145fe29b23ec7f48b23687caf4bf952, type: 2}
   - {fileID: 11400000, guid: 686d828269f772b44af14f41f026d45f, type: 2}
   - {fileID: 11400000, guid: 4b77f74615a790e469914e580deb216a, type: 2}
-  elfStarterDeck: []
-  elfRewardPool: []
+  - {fileID: 11400000, guid: b9aa177071aca7b4e81d30cb5dd2f24a, type: 2}
+  - {fileID: 11400000, guid: 43862f283b1879646a4c4c6d561036d9, type: 2}
+  - {fileID: 11400000, guid: 167709d573f36284ca040f63e28d6276, type: 2}
+  - {fileID: 11400000, guid: 71688733da0e97a40bb76a9d0dbf0739, type: 2}
+  - {fileID: 11400000, guid: 5563ed78b46fe7540a112b9f15e3106e, type: 2}
+  elfStarterDeck:
+  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
+  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
+  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
+  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
+  - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
+  - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
+  - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
+  - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
+  - {fileID: 11400000, guid: 1286bd59874fef843a2fc8abdc851422, type: 2}
+  - {fileID: 11400000, guid: 381bdc8c9b08d14468b4c2be48cbf806, type: 2}
+  elfRewardPool:
+  - {fileID: 11400000, guid: f38c028c73fd38c49b34b32710f65608, type: 2}
+  - {fileID: 11400000, guid: 6eb9998f050459d498d32ca9bbec33a4, type: 2}
+  - {fileID: 11400000, guid: 8246c9ad7b396da4e884789c2c76140d, type: 2}
+  - {fileID: 11400000, guid: 7659b1e8355007643bef94afc8f4e8a3, type: 2}
+  - {fileID: 11400000, guid: 56862d12e4437214ea6a7fe5397654cb, type: 2}
+  - {fileID: 11400000, guid: 5679ef741162ee64aab19e754cf68743, type: 2}
+  - {fileID: 11400000, guid: 0a153e76bbd264b499c55475853a1012, type: 2}
+  - {fileID: 11400000, guid: ca7336092d65f76469e34204db609a82, type: 2}
+  - {fileID: 11400000, guid: e740f88e60044b449bcf85fdfb7ccc48, type: 2}
+  - {fileID: 11400000, guid: 7056f83c25062f74284a85dd6ba2a69c, type: 2}
+  - {fileID: 11400000, guid: 734b1f797fccc6b438bd8d7497a1d31b, type: 2}
+  - {fileID: 11400000, guid: d4ad3fc50564e6048bf293465e715940, type: 2}
+  - {fileID: 11400000, guid: 17ae9e1fe5c92f448b0f31d05d0eef22, type: 2}
+  - {fileID: 11400000, guid: 4933551dccc46bf469449fbc4d76403a, type: 2}
+  - {fileID: 11400000, guid: 1a483765f368c0946bdd531afd0a53f6, type: 2}
+  - {fileID: 11400000, guid: fe51057f850affd49b9981ac9bcf4dff, type: 2}
+  - {fileID: 11400000, guid: 8464fc4242382524da033806c74c8615, type: 2}
   maiarStarterDeck: []
   maiarRewardPool: []
   currentEncounter:
@@ -615,14 +647,56 @@ MonoBehaviour:
     - enemyPrefabs:
       - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
       - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
-    lateEncounters: []
-    eliteEncounters: []
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 5ec94257511684e4da5caadcc7cfdc13, type: 3}
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 5ec94257511684e4da5caadcc7cfdc13, type: 3}
+    lateEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 92b3109d763cea74a823995605d9295e, type: 3}
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 5ec94257511684e4da5caadcc7cfdc13, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+      - {fileID: 4124100705377239904, guid: f8fb22415a6fe29489bf04c2cbc82f09, type: 3}
+      - {fileID: 4124100705377239904, guid: 5ec94257511684e4da5caadcc7cfdc13, type: 3}
+    eliteEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 5ec94257511684e4da5caadcc7cfdc13, type: 3}
     bossEncounter:
       enemyPrefabs:
       - {fileID: 4124100705377239904, guid: 170370c75658a714d87e71847ba00188, type: 3}
   elfEncounters:
-    earlyEncounters: []
-    midEncounters: []
+    earlyEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: c09703fcf8316894ab8bf091704e40a6, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
+    midEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: c09703fcf8316894ab8bf091704e40a6, type: 3}
+      - {fileID: 4124100705377239904, guid: db415144a51b1d640813d95dcc3cc669, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
+      - {fileID: 4124100705377239904, guid: db415144a51b1d640813d95dcc3cc669, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: f3d17668548449746add42d3ffc6d62f, type: 3}
     lateEncounters: []
     eliteEncounters: []
     bossEncounter:
@@ -634,6 +708,7 @@ MonoBehaviour:
     eliteEncounters: []
     bossEncounter:
       enemyPrefabs: []
+  gold: 80
 --- !u!4 &209556489
 Transform:
   m_ObjectHideFlags: 0

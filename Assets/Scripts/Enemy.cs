@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     public int currentShield = 0;
     public int currentAttack = 0;
     public int currentBleed = 0;
-
+    public bool isStunned = false;
     public bool isFlying = false;
 
     private int nextBleedToInflict = 0;
@@ -39,9 +39,20 @@ public class Enemy : MonoBehaviour
     {
         StartCoroutine(SetupTurnRoutine(0));
     }
+    public void Stun()
+    {
+        isStunned = true;
+    }
+
 
     public IEnumerator ExecuteTurnRoutine()
     {
+        if (isStunned)
+        {
+            isStunned = false;
+            yield return new WaitForSeconds(0.3f);
+            yield break;
+        }
         if (currentAttack > 0 || nextBleedToInflict > 0)
         {
             yield return StartCoroutine(AttackPlayerRoutine(GameManager.Instance.player, currentAttack, nextBleedToInflict));

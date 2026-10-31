@@ -33,6 +33,9 @@ public class Player : MonoBehaviour
     [Header("Attack FX")]
     [SerializeField] private GameObject arrowPrefab;
     [SerializeField] private Transform shootPoint;
+    [Header("Medic / Regen")]
+    public int currentMedic = 0;
+    [SerializeField] private TextMeshProUGUI medicText;
 
     private void Start()
     {
@@ -49,7 +52,38 @@ public class Player : MonoBehaviour
         currentMana = maxMana;
         UpdateUI();
     }
+    public void ApplyMedic(int amount)
+    {
+        currentMedic += amount;
+        UpdateUI();
+    }
 
+    public void Heal(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        if (RunManager.Instance != null)
+        {
+            RunManager.Instance.playerCurrentHealth = currentHealth;
+        }
+        UpdateUI();
+    }
+
+    public void GainMana(int amount)
+    {
+        currentMana += amount;
+        UpdateUI();
+    }
+
+    public IEnumerator TickMedicRoutine()
+    {
+        if (currentMedic <= 0) yield break;
+
+        Heal(currentMedic);
+        currentMedic--;
+        UpdateUI();
+
+        yield return new WaitForSeconds(0.25f);
+    }
     public void ApplyBleed(int amount)
     {
         currentBleed += amount;
@@ -157,7 +191,12 @@ public class Player : MonoBehaviour
         if (bleedText != null)
         {
             bleedText.gameObject.SetActive(currentBleed > 0);
-            bleedText.text = $"🩸{currentBleed}";
+            bleedText.text = $"{currentBleed}";
+        }
+        if (medicText != null)
+        {
+            medicText.gameObject.SetActive(currentMedic > 0);
+            medicText.text = $"+{currentMedic}";
         }
     }
 
@@ -168,6 +207,10 @@ public class Player : MonoBehaviour
             TakeDirectDamage(card.selfDamage);
             if (currentHealth <= 0) yield break;
         }
+
+        if (card.heal > 0) Heal(card.heal);
+        if (card.medic > 0) ApplyMedic(card.medic);
+        if (card.gainMana > 0) GainMana(card.gainMana);
 
         if (card.shield > 0)
         {
@@ -185,6 +228,7 @@ public class Player : MonoBehaviour
         if (card.target == CardTarget.SingleEnemy && singleTarget != null)
         {
             if (card.doubleBleed) singleTarget.DoubleBleed();
+            if (card.stun) singleTarget.Stun();
             if (card.damage > 0 || card.bleed > 0)
             {
                 yield return StartCoroutine(AttackEnemyRoutine(singleTarget, card));
@@ -197,8 +241,40 @@ public class Player : MonoBehaviour
                 yield return StartCoroutine(AttackAllEnemiesRoutine(allEnemies, card));
             }
         }
+        else if (card.target == CardTarget.RandomEnemy)
+        {
+            if (card.damage > 0 || card.bleed > 0)
+            {
+                yield return StartCoroutine(AttackRandomEnemiesRoutine(card));
+            }
+        }
     }
+    public IEnumerator AttackRandomEnemiesRoutine(CardSO card)
+    {
+        Vector3 originalPos = transform.position;
+        Vector3 lungePos = originalPos + new Vector3(0.4f, 0, 0);
 
+        transform.position = lungePos;
+        yield return new WaitForSeconds(0.08f);
+
+        for (int hit = 0; hit < card.hitCount; hit++)
+        {
+            List<Enemy> alive = GameManager.Instance.enemiesAlive.FindAll(e => e != null && e.currentHealth > 0);
+            if (alive.Count == 0) break;
+
+            Enemy randomTarget = alive[Random.Range(0, alive.Count)];
+
+            int bleedToApply = (hit == 0) ? card.bleed : 0;
+            yield return StartCoroutine(FireArrowRoutine(randomTarget, card.damage, bleedToApply));
+
+            if (card.hitCount > 1)
+            {
+                yield return new WaitForSeconds(0.1f);
+            }
+        }
+
+        transform.position = originalPos;
+    }
     public IEnumerator AttackEnemyRoutine(Enemy target, CardSO card)
     {
         Vector3 originalPos = transform.position;

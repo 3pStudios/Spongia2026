@@ -21,9 +21,13 @@ MonoBehaviour:
   damage: 11
   hitCount: 1
   shield: 0
+  heal: 0
+  medic: 0
   bleed: 6
   doubleBleed: 0
-  drawCards: 1
+  drawCards: 0
+  gainMana: 0
   selfDamage: 0
   bloodletting: 0
   thornyShield: 0
+  stun: 0
