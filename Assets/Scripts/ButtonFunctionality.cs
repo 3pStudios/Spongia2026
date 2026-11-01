@@ -19,7 +19,7 @@ public class ButtonFunctionality : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene("Start Menu");
+        SceneManager.LoadScene("Start menu");
     }
 
     public void StartHalflingsGame()
@@ -77,5 +77,9 @@ public class ButtonFunctionality : MonoBehaviour
         {
             thing.SetActive(false);
         }
+    }
+    public void PlayButtonClick()
+    {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayButton();
     }
 }

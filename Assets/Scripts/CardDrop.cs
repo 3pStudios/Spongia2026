@@ -31,7 +31,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (GameManager.Instance.isProcessingTurn) return;
-
+         if (AudioManager.Instance != null) AudioManager.Instance.PlayCard();
         if (transform.parent != canvas.transform)
         {
             originalParent = transform.parent;

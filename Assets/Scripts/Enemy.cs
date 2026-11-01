@@ -125,6 +125,7 @@ public class Enemy : MonoBehaviour
 
         currentShield = amount;
         UpdateUI();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayShield();
 
         yield return new WaitForSeconds(0.4f);
         transform.localScale = originalScale;
@@ -154,9 +155,10 @@ public class Enemy : MonoBehaviour
 
         currentHealth = Mathf.Clamp(currentHealth - currentBleed, 0, maxHealth);
         CameraShake.Instance.Shake(0.08f, 0.06f);
-
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayDamage();
         currentBleed--;
         UpdateUI();
+        
 
         yield return new WaitForSeconds(0.25f);
 
@@ -178,7 +180,7 @@ public class Enemy : MonoBehaviour
         Projectile projectile = arrowObj.GetComponent<Projectile>();
 
         yield return StartCoroutine(projectile.FlyToTarget(target.transform.position, 30f));
-
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayHit();
         if (attackDamage > 0) target.TakeDamage(attackDamage);
         if (bleedDamage > 0) target.ApplyBleed(bleedDamage);
 
@@ -198,6 +200,7 @@ public class Enemy : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
 
         UpdateUI();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayDamage();
         CameraShake.Instance.Shake(0.1f, 0.08f);
 
         if (currentHealth <= 0)

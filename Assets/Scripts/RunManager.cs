@@ -23,6 +23,7 @@ public class RunManager : MonoBehaviour
     [Header("Progress")]
     public Race currentRace = Race.Halflings;
     public int currentFloor = -1;
+    public int currentColumn = -1;
     public string mapSceneName = "Map";
     public string combatSceneName = "SampleScene";
     public bool isBossFight = false;
@@ -80,6 +81,7 @@ public class RunManager : MonoBehaviour
     {
         currentRace = race;
         currentFloor = -1;
+        currentColumn = -1;
         isBossFight = false;
         gold = 80;
         playerMaxHealth = 20;

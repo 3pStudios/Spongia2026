@@ -130,6 +130,9 @@ public class GameManager : MonoBehaviour
     {
         if (!CanPlayCard(card)) return;
 
+
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayCard();
+
         player.SpendMana(card.cardCost);
         DiscardCard(card);
         StartCoroutine(ExecuteCardSequence(card, target));

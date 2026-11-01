@@ -99,7 +99,6 @@ public class Player : MonoBehaviour
 
         currentBleed--;
         UpdateUI();
-
         yield return new WaitForSeconds(0.25f);
 
         if (currentHealth <= 0)
@@ -116,6 +115,7 @@ public class Player : MonoBehaviour
 
         currentShield += amount;
         UpdateUI();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayShield();
 
         yield return new WaitForSeconds(0.4f);
         transform.localScale = originalScale;
@@ -129,6 +129,7 @@ public class Player : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - unblockedDamage, 0, maxHealth);
 
         UpdateUI();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayDamage();
         if (RunManager.Instance != null)
         {
             RunManager.Instance.playerCurrentHealth = currentHealth;
@@ -145,6 +146,7 @@ public class Player : MonoBehaviour
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         UpdateUI();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayDamage();
         if (RunManager.Instance != null)
         {
             RunManager.Instance.playerCurrentHealth = currentHealth;
@@ -351,6 +353,7 @@ public class Player : MonoBehaviour
 
         if (target != null && target.currentHealth > 0)
         {
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayHit();
             if (damage > 0) target.TakeDamage(damage);
             if (bleed > 0) target.ApplyBleed(bleed);
         }

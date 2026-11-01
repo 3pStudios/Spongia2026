@@ -149,6 +149,7 @@ public class MapGen : MonoBehaviour
             spriteRenderer.sortingOrder = -1;
         }
     }
+    
 
     string ChooseNodeType(List<string> cantBe)
     {
@@ -240,7 +241,25 @@ public class MapGen : MonoBehaviour
                 }
             }
     }
+    public static bool CanMove(int toCol, int toFloor)
+    {
+        if (RunManager.Instance == null) return true;
 
+        int fromFloor = RunManager.Instance.currentFloor;
+        int fromCol = RunManager.Instance.currentColumn;
+
+        if (fromFloor == -1) return toFloor == 0;
+        if (toFloor != fromFloor + 1) return false;
+        if (mapData == null || fromCol < 0) return true;
+        if (toFloor >= mapData.GetLength(1)) return true;
+
+        Node from = mapData[fromCol, fromFloor];
+        if (toCol == fromCol - 1) return from.leftPath;
+        if (toCol == fromCol) return from.straightPath;
+        if (toCol == fromCol + 1) return from.rightPath;
+
+        return false;
+    }
     void GeneratePath(Node[,] map, int pos, int floors, int collums)
     {
         int direction;
