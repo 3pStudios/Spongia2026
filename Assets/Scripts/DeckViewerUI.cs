@@ -17,7 +17,6 @@ public class DeckViewerUI : MonoBehaviour
 
     private void Awake()
     {
-        if (panel != null) panel.SetActive(false);
         if (closeButton != null) closeButton.onClick.AddListener(Close);
     }
 
@@ -27,6 +26,7 @@ public class DeckViewerUI : MonoBehaviour
         titleText.text = "Master Deck";
         closeButton.gameObject.SetActive(true);
         onCardSelectedCallback = null;
+        panel.transform.SetAsLastSibling();
         PopulateDeck();
     }
 
@@ -36,6 +36,7 @@ public class DeckViewerUI : MonoBehaviour
         titleText.text = "Select a Card to Remove";
         closeButton.gameObject.SetActive(false);
         onCardSelectedCallback = onRemove;
+        panel.transform.SetAsLastSibling();
         PopulateDeck();
     }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class MapUIManager : MonoBehaviour
 {
@@ -139,6 +140,8 @@ public class MapUIManager : MonoBehaviour
 
         eventChoice1Button.onClick.RemoveAllListeners();
         eventChoice2Button.onClick.RemoveAllListeners();
+        eventChoice1Button.interactable = true;
+        eventChoice2Button.interactable = true;
 
         if (activeEventIndex == 0)
         {
@@ -151,9 +154,14 @@ public class MapUIManager : MonoBehaviour
             {
                 RunManager.Instance.HealPlayer(-4);
                 eventPanel.SetActive(false);
-                deckViewer.OpenForRemoval(card => UpdateHeaderUI());
+                StartCoroutine(OpenRemovalRoutine());
             });
-            eventChoice2Button.onClick.AddListener(() => { eventPanel.SetActive(false); UpdateHeaderUI(); });
+
+            eventChoice2Button.onClick.AddListener(() =>
+            {
+                eventPanel.SetActive(false);
+                UpdateHeaderUI();
+            });
         }
         else if (activeEventIndex == 1)
         {
@@ -163,6 +171,7 @@ public class MapUIManager : MonoBehaviour
             eventChoice2Text.text = "Share Rations -> Heal 6 HP";
 
             eventChoice1Button.interactable = RunManager.Instance.gold >= 40;
+
             eventChoice1Button.onClick.AddListener(() =>
             {
                 if (RunManager.Instance.SpendGold(40))
@@ -173,6 +182,7 @@ public class MapUIManager : MonoBehaviour
                     UpdateHeaderUI();
                 }
             });
+
             eventChoice2Button.onClick.AddListener(() =>
             {
                 RunManager.Instance.HealPlayer(6);
@@ -194,6 +204,7 @@ public class MapUIManager : MonoBehaviour
                 eventPanel.SetActive(false);
                 UpdateHeaderUI();
             });
+
             eventChoice2Button.onClick.AddListener(() =>
             {
                 RunManager.Instance.AddMaxHealth(4);
@@ -201,5 +212,11 @@ public class MapUIManager : MonoBehaviour
                 UpdateHeaderUI();
             });
         }
+    }
+
+    private IEnumerator OpenRemovalRoutine()
+    {
+        yield return null;
+        deckViewer.OpenForRemoval(card => UpdateHeaderUI());
     }
 }

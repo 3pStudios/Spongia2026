@@ -82,4 +82,9 @@ public class ButtonFunctionality : MonoBehaviour
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayButton();
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }   
 }
