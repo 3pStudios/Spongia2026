@@ -11,20 +11,27 @@ public class Enemy : MonoBehaviour
     public int currentShield = 0;
     public int currentAttack = 0;
     public int currentBleed = 0;
-    public bool isStunned = false;
     public bool isFlying = false;
+    public bool isStunned = false;
 
     private int nextBleedToInflict = 0;
+    private int currentTurnIndex = 0;
 
     [Header("Turns Data")]
     public EnemyTurnsSO enemyTurnsSO;
 
-    [Header("UI Elements")]
+    [Header("Current Turn UI")]
     [SerializeField] private TextMeshProUGUI healthText;
-    [SerializeField] private TextMeshProUGUI shieldIndicationText;
-    [SerializeField] private TextMeshProUGUI attackIndicationText;
-    [SerializeField] private TextMeshProUGUI bleedText;
     [SerializeField] private Image healthBarFill;
+    [SerializeField] private TextMeshProUGUI attackIndicationText;
+    [SerializeField] private TextMeshProUGUI shieldIndicationText;
+    [SerializeField] private TextMeshProUGUI bleedText;
+
+    [Header("Next Turn Preview Indications")]
+    [SerializeField] private Transform indicationsParent;
+    [SerializeField] private GameObject attackIndicationPrefab;
+    [SerializeField] private GameObject shieldIndicationPrefab;
+    [SerializeField] private GameObject bleedIndicationPrefab;
 
     [Header("Attack FX")]
     [SerializeField] private GameObject arrowPrefab;
@@ -37,13 +44,9 @@ public class Enemy : MonoBehaviour
 
     public void SetupEnemy()
     {
+        currentTurnIndex = 0;
         StartCoroutine(SetupTurnRoutine(0));
     }
-    public void Stun()
-    {
-        isStunned = true;
-    }
-
 
     public IEnumerator ExecuteTurnRoutine()
     {
@@ -53,6 +56,7 @@ public class Enemy : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             yield break;
         }
+
         if (currentAttack > 0 || nextBleedToInflict > 0)
         {
             yield return StartCoroutine(AttackPlayerRoutine(GameManager.Instance.player, currentAttack, nextBleedToInflict));
@@ -61,8 +65,8 @@ public class Enemy : MonoBehaviour
 
     public IEnumerator SetupNextTurnRoutine(int turn)
     {
-        int nextTurnIndex = (turn + 1) % enemyTurnsSO.enemyTurns.Length;
-        yield return StartCoroutine(SetupTurnRoutine(nextTurnIndex));
+        currentTurnIndex = (currentTurnIndex + 1) % enemyTurnsSO.enemyTurns.Length;
+        yield return StartCoroutine(SetupTurnRoutine(currentTurnIndex));
     }
 
     private IEnumerator SetupTurnRoutine(int turnIndex)
@@ -81,7 +85,36 @@ public class Enemy : MonoBehaviour
             currentShield = 0;
         }
 
+        UpdateNextTurnIndications(turnIndex);
         UpdateUI();
+    }
+
+    private void UpdateNextTurnIndications(int currentIdx)
+    {
+        if (indicationsParent == null || enemyTurnsSO == null || enemyTurnsSO.enemyTurns.Length == 0) return;
+
+        foreach (Transform child in indicationsParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        int nextIdx = (currentIdx + 1) % enemyTurnsSO.enemyTurns.Length;
+        EnemyTurn nextTurn = enemyTurnsSO.enemyTurns[nextIdx];
+
+        if (nextTurn.attack > 0 && attackIndicationPrefab != null)
+        {
+            Instantiate(attackIndicationPrefab, indicationsParent);
+        }
+
+        if (nextTurn.shield > 0 && shieldIndicationPrefab != null)
+        {
+            Instantiate(shieldIndicationPrefab, indicationsParent);
+        }
+
+        if (nextTurn.bleed > 0 && bleedIndicationPrefab != null)
+        {
+            Instantiate(bleedIndicationPrefab, indicationsParent);
+        }
     }
 
     public IEnumerator ApplyShieldRoutine(int amount)
@@ -108,6 +141,11 @@ public class Enemy : MonoBehaviour
     {
         currentBleed *= 2;
         UpdateUI();
+    }
+
+    public void Stun()
+    {
+        isStunned = true;
     }
 
     public IEnumerator TickBleedRoutine()
@@ -177,15 +215,15 @@ public class Enemy : MonoBehaviour
 
     private void UpdateUI()
     {
-        healthText.text = $"{currentHealth}/{maxHealth}";
-        healthBarFill.fillAmount = (float)currentHealth / maxHealth;
-        attackIndicationText.text = currentAttack.ToString();
-        shieldIndicationText.text = currentShield.ToString();
+        if (healthText != null) healthText.text = $"{currentHealth}/{maxHealth}";
+        if (healthBarFill != null) healthBarFill.fillAmount = (float)currentHealth / maxHealth;
+        if (attackIndicationText != null) attackIndicationText.text = currentAttack.ToString();
+        if (shieldIndicationText != null) shieldIndicationText.text = currentShield.ToString();
 
         if (bleedText != null)
         {
             bleedText.gameObject.SetActive(currentBleed > 0);
-            bleedText.text = $"🩸{currentBleed}";
+            bleedText.text = currentBleed.ToString();
         }
     }
 }
