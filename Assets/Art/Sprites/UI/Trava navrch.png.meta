@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 87418ec18c04c6e47bb260d2b718e286
+guid: e7963ec041dee6e40848593780ca47b2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4682045565930803060
-    second: Trava a zem naspodok_0
+      213: -6093500801016084356
+    second: Trava navrch_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -73,9 +73,9 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 0
+    resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Trava a zem naspodok_0
+      name: Trava navrch_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 44
         width: 320
-        height: 85
+        height: 29
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c8070844d58060fb0800000000000000
-      internalID: -4682045565930803060
+      spriteID: c78c0e46e498f6ba0800000000000000
+      internalID: -6093500801016084356
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Trava a zem naspodok_0: -4682045565930803060
+      Trava navrch_0: -6093500801016084356
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

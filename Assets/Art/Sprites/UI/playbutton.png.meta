@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 688055db2f9d94649a3da55c1201d6fd
+guid: b142f2b87698c4349a8500a1be55aecf
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1608297098424529312
-    second: Obloha _0
+      213: -490242242413125318
+    second: playbutton_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -73,9 +73,9 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 0
+    resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Obloha _0
+      name: playbutton_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 180
+        width: 40
+        height: 12
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0a1b2ec90b1d15610800000000000000
-      internalID: 1608297098424529312
+      spriteID: a312317274f4239f0800000000000000
+      internalID: -490242242413125318
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Obloha _0: 1608297098424529312
+      playbutton_0: -490242242413125318
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

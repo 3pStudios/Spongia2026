@@ -141,6 +141,15 @@ public class MapGen : MonoBehaviour
         }
     }
 
+    void InstantiatePathBehindIcons(GameObject path, Vector3 position)
+    {
+        GameObject pathObject = Instantiate(path, position, Quaternion.identity);
+        foreach (SpriteRenderer spriteRenderer in pathObject.GetComponentsInChildren<SpriteRenderer>())
+        {
+            spriteRenderer.sortingOrder = -1;
+        }
+    }
+
     string ChooseNodeType(List<string> cantBe)
     {
         Dictionary<string, int> canBe = new Dictionary<string, int>{};
@@ -178,6 +187,24 @@ public class MapGen : MonoBehaviour
     {
         float halfWidth = (collums-1)/2f;
 
+        for (int floor = 0; floor < floors; floor++)
+            for (int collum = 0; collum < collums; collum++)
+            {
+                if (map[collum, floor].inMap)
+                {
+                    if (map[collum, floor].leftPath)
+                        InstantiatePathBehindIcons(LeftPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z));
+                    if (map[collum, floor].rightPath)
+                        InstantiatePathBehindIcons(RightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z));
+                    if (map[collum, floor].straightPath)
+                        InstantiatePathBehindIcons(StraightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z));
+                    if (map[collum, floor].BossPath != -1)
+                        InstantiatePathBehindIcons(BossPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z));
+                    if (map[collum, floor].StartPath != -1)
+                        InstantiatePathBehindIcons(StartPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z));
+                }
+            }
+
         Instantiate(Start, new Vector3(bottomLeftCorner.x + halfWidth*horizontalDistance, bottomLeftCorner.y + -2*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
         GameObject bossObj = Instantiate(Boss, new Vector3(bottomLeftCorner.x + halfWidth * horizontalDistance, bottomLeftCorner.y + (floors + 1) * verticalDistance, bottomLeftCorner.z), Quaternion.identity);
         if (bossObj != null && bossObj.TryGetComponent(out MapNode bossNode))
@@ -190,16 +217,6 @@ public class MapGen : MonoBehaviour
             {
                 if (map[collum, floor].inMap)
                 {
-                    if (map[collum, floor].leftPath)
-                        Instantiate(LeftPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    if (map[collum, floor].rightPath)
-                        Instantiate(RightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    if (map[collum, floor].straightPath)
-                        Instantiate(StraightPath, new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    if (map[collum, floor].BossPath != -1)
-                        Instantiate(BossPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
-                    if (map[collum, floor].StartPath != -1)
-                        Instantiate(StartPaths[collum], new Vector3(bottomLeftCorner.x + collum*horizontalDistance, bottomLeftCorner.y + floor*verticalDistance, bottomLeftCorner.z), Quaternion.identity);
                     if (map[collum, floor].type == "None")
                     {   
                         if (floor < 4)
@@ -316,4 +333,3 @@ public class MapGen : MonoBehaviour
 
     }
 }
-
