@@ -3712,9 +3712,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1252514825}
-        m_TargetAssemblyTypeName: TutorialManger, Assembly-CSharp
-        m_MethodName: MainMenu
+      - m_Target: {fileID: 1252514826}
+        m_TargetAssemblyTypeName: ButtonFunctionality, Assembly-CSharp
+        m_MethodName: ReturnToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5928,7 +5928,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1252514824}
-  - component: {fileID: 1252514825}
+  - component: {fileID: 1252514826}
   m_Layer: 0
   m_Name: ButtonManager
   m_TagString: Untagged
@@ -5951,7 +5951,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1252514825
+--- !u!114 &1252514826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5960,9 +5960,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1252514823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1052001e81828f48b541f689b26e3cc, type: 3}
+  m_Script: {fileID: 11500000, guid: c88ab2691e04b624387d4a477351927e, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TutorialManger
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonFunctionality
+  menuThings: []
+  raceSelectionThings: []
   scenes:
   - {fileID: 1319599550}
   - {fileID: 468872005}
@@ -8374,8 +8376,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1252514825}
-        m_TargetAssemblyTypeName: TutorialManger, Assembly-CSharp
+      - m_Target: {fileID: 1252514826}
+        m_TargetAssemblyTypeName: ButtonFunctionality, Assembly-CSharp
         m_MethodName: Next
         m_Mode: 1
         m_Arguments:

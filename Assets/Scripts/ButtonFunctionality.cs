@@ -92,4 +92,19 @@ public class ButtonFunctionality : MonoBehaviour
     {
         SceneManager.LoadScene("Tutorial");
     }
+    
+    public List<GameObject> scenes;
+    int sceneNum = 1;
+
+    public void Next()
+    {
+        if (sceneNum < scenes.Count - 1)
+        {
+            scenes[sceneNum].SetActive(false);
+            sceneNum += 1;
+            scenes[sceneNum].SetActive(true);
+        } 
+        else
+            ReturnToMainMenu();
+    }
 }
