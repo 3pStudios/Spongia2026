@@ -1,3 +1,5 @@
+//Menit hlasitost hudby a sfx pomocou sliderou
+
 using UnityEngine;
 
 public class SettingsMenu : MonoBehaviour

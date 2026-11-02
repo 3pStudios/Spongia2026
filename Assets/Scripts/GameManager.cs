@@ -32,7 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject cardPlace;
     [SerializeField] private GameObject cardPrefab;
     [SerializeField] private RewardUI rewardUI;
-
+    [SerializeField] private GameObject loseScreen;
+    [SerializeField] private GameObject winScreen;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -290,7 +291,7 @@ public class GameManager : MonoBehaviour
 
         if (RunManager.Instance != null && RunManager.Instance.isBossFight)
         {
-            SceneManager.LoadScene("Start Menu");
+            winScreen.SetActive(true);
             yield break;
         }
 
@@ -309,7 +310,7 @@ public class GameManager : MonoBehaviour
     {
         isProcessingTurn = true;
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("Start Menu");
+        loseScreen.SetActive(true);
     }
 }
 

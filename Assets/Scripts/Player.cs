@@ -42,6 +42,9 @@ public class Player : MonoBehaviour
     [SerializeField] private SpriteRenderer sr;
     [SerializeField] private Sprite halflingSprite;
     [SerializeField] private Sprite elfSprite;
+    [SerializeField] private Sprite bgHalflings;
+    [SerializeField] private Sprite bgElves;
+    [SerializeField] private SpriteRenderer bgSprite;
 
 
     public Race playerRace = Race.Halflings;
@@ -59,6 +62,7 @@ public class Player : MonoBehaviour
         }
         playerRace = RunManager.Instance.currentRace;
         sr.sprite = playerRace == Race.Halflings ? halflingSprite : elfSprite;
+        bgSprite.sprite = playerRace == Race.Halflings ? bgHalflings : bgElves;
         currentMana = maxMana;
         UpdateUI();
     }

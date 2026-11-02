@@ -1,3 +1,6 @@
+//Spusta Hudbu a SFX cez samostatne tracky, aby sa dalo menit hlasitost samostatne
+
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
