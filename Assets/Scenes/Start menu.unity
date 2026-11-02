@@ -336,14 +336,14 @@ MonoBehaviour:
   elfStarterDeck:
   - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
   - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
-  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
-  - {fileID: 11400000, guid: 92e340e0fe38b1c4c875089aa85395b2, type: 2}
-  - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
   - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
   - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
   - {fileID: 11400000, guid: 59b5578c48822434ba6e00b532e1f32f, type: 2}
   - {fileID: 11400000, guid: 1286bd59874fef843a2fc8abdc851422, type: 2}
   - {fileID: 11400000, guid: 381bdc8c9b08d14468b4c2be48cbf806, type: 2}
+  - {fileID: 11400000, guid: 6eb9998f050459d498d32ca9bbec33a4, type: 2}
+  - {fileID: 11400000, guid: 6eb9998f050459d498d32ca9bbec33a4, type: 2}
+  - {fileID: 11400000, guid: e740f88e60044b449bcf85fdfb7ccc48, type: 2}
   elfRewardPool:
   - {fileID: 11400000, guid: f38c028c73fd38c49b34b32710f65608, type: 2}
   - {fileID: 11400000, guid: 6eb9998f050459d498d32ca9bbec33a4, type: 2}
@@ -414,30 +414,46 @@ MonoBehaviour:
   elfEncounters:
     earlyEncounters:
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: c09703fcf8316894ab8bf091704e40a6, type: 3}
+      - {fileID: 4124100705377239904, guid: 5f3ae6fa3db6a0b4aa77b1c26d4d2c3c, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
+      - {fileID: 4124100705377239904, guid: 2b10ab3594978e940896dbfbbb7d8c18, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
-      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
+      - {fileID: 4124100705377239904, guid: 2b10ab3594978e940896dbfbbb7d8c18, type: 3}
     midEncounters:
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: c09703fcf8316894ab8bf091704e40a6, type: 3}
-      - {fileID: 4124100705377239904, guid: db415144a51b1d640813d95dcc3cc669, type: 3}
+      - {fileID: 4124100705377239904, guid: 5f3ae6fa3db6a0b4aa77b1c26d4d2c3c, type: 3}
+      - {fileID: 4124100705377239904, guid: 87fb34847e4c79045a5784fab531b052, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
-      - {fileID: 4124100705377239904, guid: 6bb5abc92b0cd564e91c096555c3d1d1, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: 34a75e60df66f2847a01e9c326e51310, type: 3}
-      - {fileID: 4124100705377239904, guid: db415144a51b1d640813d95dcc3cc669, type: 3}
+      - {fileID: 4124100705377239904, guid: 2b10ab3594978e940896dbfbbb7d8c18, type: 3}
+      - {fileID: 4124100705377239904, guid: 87fb34847e4c79045a5784fab531b052, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: f3d17668548449746add42d3ffc6d62f, type: 3}
-    lateEncounters: []
-    eliteEncounters: []
+      - {fileID: 4124100705377239904, guid: 5ee2da532fc9c184395a816624ac008d, type: 3}
+    lateEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 5ee2da532fc9c184395a816624ac008d, type: 3}
+      - {fileID: 4124100705377239904, guid: 2b10ab3594978e940896dbfbbb7d8c18, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 5f3ae6fa3db6a0b4aa77b1c26d4d2c3c, type: 3}
+      - {fileID: 4124100705377239904, guid: 5f3ae6fa3db6a0b4aa77b1c26d4d2c3c, type: 3}
+      - {fileID: 4124100705377239904, guid: 87fb34847e4c79045a5784fab531b052, type: 3}
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 2b10ab3594978e940896dbfbbb7d8c18, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
+      - {fileID: 4124100705377239904, guid: 87fb34847e4c79045a5784fab531b052, type: 3}
+    eliteEncounters:
+    - enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 5ee2da532fc9c184395a816624ac008d, type: 3}
+      - {fileID: 4124100705377239904, guid: 6ac7bf36dabfca246b8fca2641305691, type: 3}
+      - {fileID: 4124100705377239904, guid: 87fb34847e4c79045a5784fab531b052, type: 3}
     bossEncounter:
-      enemyPrefabs: []
+      enemyPrefabs:
+      - {fileID: 4124100705377239904, guid: 522048cf9cd6e6045adc9b70fe99eb2c, type: 3}
   maiarEncounters:
     earlyEncounters: []
     midEncounters: []
@@ -651,7 +667,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NASA SUPER HRA
+  m_text: BATTLES OF ARDA
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 80d72027542419a40a0b4da86a491007, type: 2}
   m_sharedMaterial: {fileID: -2034651067488142043, guid: 80d72027542419a40a0b4da86a491007,
@@ -685,7 +701,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 32
+  m_fontStyle: 33
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -1140,6 +1156,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 581071263}
+  m_CullTransparentMesh: 1
+--- !u!1 &631977722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 631977723}
+  - component: {fileID: 631977725}
+  - component: {fileID: 631977724}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &631977723
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631977722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1136925590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -181.34, y: 352.925}
+  m_SizeDelta: {x: 1557.3, y: 11.48}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &631977724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631977722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &631977725
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631977722}
   m_CullTransparentMesh: 1
 --- !u!1 &681232844
 GameObject:
@@ -1622,11 +1713,15 @@ MonoBehaviour:
   menuThings:
   - {fileID: 196435636}
   - {fileID: 218306328}
+  - {fileID: 1204881314}
+  - {fileID: 631977722}
+  - {fileID: 1616995681}
   raceSelectionThings:
   - {fileID: 845265830}
   - {fileID: 581071263}
   - {fileID: 1268092237}
   - {fileID: 210832685}
+  pausePanel: {fileID: 0}
   scenes: []
 --- !u!4 &849635007
 Transform:
@@ -1879,6 +1974,7 @@ RectTransform:
   - {fileID: 1204881315}
   - {fileID: 1616995682}
   - {fileID: 1268092238}
+  - {fileID: 631977723}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
 public class Player : MonoBehaviour
 {
     [Header("Health")]
@@ -26,9 +27,11 @@ public class Player : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI shieldText;
     [SerializeField] private Image healthBarFill;
     [SerializeField] private TextMeshProUGUI manaText;
     [SerializeField] private TextMeshProUGUI bleedText;
+    [SerializeField] private GameObject medicIcon;
 
     [Header("Attack FX")]
     [SerializeField] private GameObject arrowPrefab;
@@ -36,6 +39,12 @@ public class Player : MonoBehaviour
     [Header("Medic / Regen")]
     public int currentMedic = 0;
     [SerializeField] private TextMeshProUGUI medicText;
+    [SerializeField] private SpriteRenderer sr;
+    [SerializeField] private Sprite halflingSprite;
+    [SerializeField] private Sprite elfSprite;
+
+
+    public Race playerRace = Race.Halflings;
 
     private void Start()
     {
@@ -48,7 +57,8 @@ public class Player : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
-
+        playerRace = RunManager.Instance.currentRace;
+        sr.sprite = playerRace == Race.Halflings ? halflingSprite : elfSprite;
         currentMana = maxMana;
         UpdateUI();
     }
@@ -189,16 +199,23 @@ public class Player : MonoBehaviour
         healthText.text = $"{currentHealth}/{maxHealth}";
         healthBarFill.fillAmount = (float)currentHealth / maxHealth;
         manaText.text = $"{currentMana}/{maxMana}";
-
+        shieldText.text = $"{currentShield}";
         if (bleedText != null)
         {
-            bleedText.gameObject.SetActive(currentBleed > 0);
             bleedText.text = $"{currentBleed}";
+        }
+        if(playerRace == Race.Elves)
+        {
+            medicIcon.SetActive(true);
+        }
+        else
+        {
+            medicIcon.SetActive(false);
         }
         if (medicText != null)
         {
-            medicText.gameObject.SetActive(currentMedic > 0);
-            medicText.text = $"+{currentMedic}";
+            
+            medicText.text = $"{currentMedic}";
         }
     }
 

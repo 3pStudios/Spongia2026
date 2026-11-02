@@ -6,8 +6,8 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance { get; private set; }
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource musicSource;
-    [SerializeField] private AudioSource sfxSource;
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
 
     [Header("Music Tracks")]
     [SerializeField] private AudioClip menuMusic;
