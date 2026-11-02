@@ -6,7 +6,7 @@ public class ButtonFunctionality : MonoBehaviour
 {
     public List<GameObject> menuThings;
     public List<GameObject> raceSelectionThings;
-
+    public GameObject pausePanel;
     public void StartGame()
     {
         OpenRaceSelection();
@@ -20,6 +20,10 @@ public class ButtonFunctionality : MonoBehaviour
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("Start menu");
+    }
+    public void ReturnToMap()
+    {
+        SceneManager.LoadScene("Map");
     }
 
     public void StartHalflingsGame()
@@ -92,7 +96,11 @@ public class ButtonFunctionality : MonoBehaviour
     {
         SceneManager.LoadScene("Tutorial");
     }
-    
+    public void Pause()
+    {
+        pausePanel.SetActive(!pausePanel.activeSelf);
+    }
+
     public List<GameObject> scenes;
     int sceneNum = 1;
 
