@@ -369,7 +369,7 @@ MonoBehaviour:
   halflingEncounters:
     earlyEncounters:
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
     - enemyPrefabs:
       - {fileID: 4124100705377239904, guid: d88a83bc28fcb2649ac8ea9a67d8d5ad, type: 3}
     - enemyPrefabs:
@@ -379,7 +379,7 @@ MonoBehaviour:
       - {fileID: 4124100705377239904, guid: d88a83bc28fcb2649ac8ea9a67d8d5ad, type: 3}
     midEncounters:
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
       - {fileID: 4124100705377239904, guid: d88a83bc28fcb2649ac8ea9a67d8d5ad, type: 3}
     - enemyPrefabs:
       - {fileID: 4124100705377239904, guid: 0760705eb3dae2b4e85a3a31e238b205, type: 3}
@@ -388,16 +388,16 @@ MonoBehaviour:
       - {fileID: 4124100705377239904, guid: 22a1ef5726910fb4b8047b8a06881a8b, type: 3}
       - {fileID: 4124100705377239904, guid: 0760705eb3dae2b4e85a3a31e238b205, type: 3}
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
       - {fileID: 4124100705377239904, guid: 22a1ef5726910fb4b8047b8a06881a8b, type: 3}
     lateEncounters:
     - enemyPrefabs:
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
       - {fileID: 4124100705377239904, guid: d88a83bc28fcb2649ac8ea9a67d8d5ad, type: 3}
     - enemyPrefabs:
       - {fileID: 4124100705377239904, guid: 0760705eb3dae2b4e85a3a31e238b205, type: 3}
-      - {fileID: 4124100705377239904, guid: f0384f9938274fb4c9b32e2e7a5eeecb, type: 3}
+      - {fileID: 4124100705377239904, guid: 63a9b8c9c73a3ee4ca17d0bd719eff12, type: 3}
       - {fileID: 4124100705377239904, guid: 22a1ef5726910fb4b8047b8a06881a8b, type: 3}
     - enemyPrefabs:
       - {fileID: 4124100705377239904, guid: d88a83bc28fcb2649ac8ea9a67d8d5ad, type: 3}
@@ -1627,6 +1627,7 @@ MonoBehaviour:
   - {fileID: 581071263}
   - {fileID: 1268092237}
   - {fileID: 210832685}
+  scenes: []
 --- !u!4 &849635007
 Transform:
   m_ObjectHideFlags: 0

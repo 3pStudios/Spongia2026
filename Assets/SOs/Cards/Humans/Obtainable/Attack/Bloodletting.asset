@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CardSO
   cardName: Bloodletting
   cardCost: 2
-  cardDescription: At the beginning of your turn, apply 2 bleed to all targets.
+  cardDescription: At the beginning of every turn, apply 2 bleed to all targets.
   target: 1
   cardImage: {fileID: 1286774850023712548, guid: 079c533b3f1572b43bf13a0e9f161e5e,
     type: 3}
