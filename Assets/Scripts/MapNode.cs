@@ -60,7 +60,7 @@ public class MapNode : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    private void OnMouseUpAsButton()
     {
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
         if (RunManager.Instance == null) return;
