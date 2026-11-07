@@ -21,6 +21,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Tutorial.unity
     guid: 7e37857091306a449a9f22ff77e0109e
   m_configObjects:
+    com.unity.adaptivePerformance.basic.provider_settings: {fileID: 11400000, guid: 992d5199b6a89b247b1dedeee3074329,
+      type: 2}
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: be6a4a9551805e0418cf4a3bd887ebb6,
+      type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: ae284b326505d4d4fa5f08233e0934db, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100,
       type: 3}
   m_UseUCBPForAssetBundles: 0

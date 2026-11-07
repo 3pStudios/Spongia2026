@@ -7652,6 +7652,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraScroll
   scrollSpeed: 1
+  touchDragSpeed: 0.0092
+  invertTouchDirection: 1
   minY: -2
   maxY: 24
   maxFloors: 12
