@@ -7514,6 +7514,7 @@ GameObject:
   - component: {fileID: 1848987125}
   - component: {fileID: 1848987126}
   - component: {fileID: 1848987127}
+  - component: {fileID: 1848987128}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -7666,6 +7667,18 @@ Skybox:
   m_GameObject: {fileID: 1848987121}
   m_Enabled: 1
   m_CustomSkybox: {fileID: 0}
+--- !u!114 &1848987128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848987121}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d34a7f6defc606e4095339e60d3a5889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScreenshotHelper
 --- !u!1001 &1851861095
 PrefabInstance:
   m_ObjectHideFlags: 0
