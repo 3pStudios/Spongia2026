@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Firebase.Analytics;
+using Firebase;
 public enum Race
 {
     Halflings,
@@ -63,6 +65,7 @@ public class RunManager : MonoBehaviour
 
     private void Awake()
     {
+        FirebaseApp.CheckAndFixDependenciesAsync();
         Application.targetFrameRate = 60;
         if (Instance != null && Instance != this)
         {
