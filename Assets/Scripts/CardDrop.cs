@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Card), typeof(RectTransform))]
 public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -10,6 +11,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private int originalSiblingIndex;
     private Card card;
     private Vector3 dragOffset;
+    private Vector2 lastPointerPos;
     private bool isDragging;
 
     private void Awake()
@@ -22,16 +24,17 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     private void Update()
     {
-        if (isDragging && !Input.GetMouseButton(0))
+        if (isDragging && (Pointer.current == null || !Pointer.current.press.isPressed))
         {
-            EndDragSequence();
+            Vector2 pos = Pointer.current != null ? Pointer.current.position.ReadValue() : lastPointerPos;
+            EndDragSequence(pos);
         }
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (GameManager.Instance.isProcessingTurn) return;
-         if (AudioManager.Instance != null) AudioManager.Instance.PlayCard();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayCard();
         if (transform.parent != canvas.transform)
         {
             originalParent = transform.parent;
@@ -39,6 +42,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
 
         isDragging = true;
+        lastPointerPos = eventData.position;
         card.SetDragging(true);
 
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
@@ -57,6 +61,8 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (!isDragging || GameManager.Instance.isProcessingTurn) return;
 
+        lastPointerPos = eventData.position;
+
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
             canvas.transform as RectTransform,
             eventData.position,
@@ -71,11 +77,11 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (isDragging)
         {
-            EndDragSequence();
+            EndDragSequence(eventData.position);
         }
     }
 
-    private void EndDragSequence()
+    private void EndDragSequence(Vector2 screenPosition)
     {
         isDragging = false;
         card.SetDragging(false);
@@ -86,7 +92,7 @@ public class CardDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             return;
         }
 
-        Vector2 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 worldPos = Camera.main.ScreenToWorldPoint(screenPosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPos, Vector2.zero);
 
         if (hit.collider != null)

@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
+[RequireComponent(typeof(Button), typeof(Image))]
 public class MapNode : MonoBehaviour
 {
     public int floor;
@@ -8,10 +9,16 @@ public class MapNode : MonoBehaviour
     public string nodeType = "BasicFight";
 
     private Vector3 baseScale;
+    private Button button;
+    private Image image;
 
     private void Awake()
     {
         baseScale = transform.localScale;
+        button = GetComponent<Button>();
+        image = GetComponent<Image>();
+
+        button.onClick.AddListener(OnNodeClicked);
     }
 
     public void Setup(int floor, int column, string nodeType)
@@ -28,25 +35,24 @@ public class MapNode : MonoBehaviour
 
     public void UpdateVisual()
     {
-        if (RunManager.Instance == null) return;
-        if (!TryGetComponent(out SpriteRenderer sr)) return;
+        if (RunManager.Instance == null || image == null) return;
 
         int curFloor = RunManager.Instance.currentFloor;
         int curCol = RunManager.Instance.currentColumn;
 
         if (floor == curFloor && column == curCol)
         {
-            sr.color = Color.yellow;
+            image.color = Color.yellow;
             transform.localScale = baseScale * 1.35f;
         }
         else if (floor <= curFloor)
         {
-            sr.color = new Color(0.35f, 0.35f, 0.35f, 0.5f);
+            image.color = new Color(0.35f, 0.35f, 0.35f, 0.5f);
             transform.localScale = baseScale;
         }
         else
         {
-            sr.color = Color.white;
+            image.color = Color.white;
             transform.localScale = baseScale;
         }
     }
@@ -60,9 +66,8 @@ public class MapNode : MonoBehaviour
         }
     }
 
-    private void OnMouseUpAsButton()
+    private void OnNodeClicked()
     {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
         if (RunManager.Instance == null) return;
 
         if (MapGen.CanMove(column, floor))
